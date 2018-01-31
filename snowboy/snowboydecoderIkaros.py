@@ -69,11 +69,10 @@ class HotwordDetector(object):
                               default sensitivity in the model will be used.
     :param audio_gain: multiply input volume by this factor.
     """
-    def __init__(self,
+    def __init__(self,decoder_model,
                  resource=RESOURCE_FILE,
                  sensitivity=[],
                  audio_gain=1):
-        decoder_model = "./models/Ikaros.pmdl"
 
         def audio_callback(in_data, frame_count, time_info, status):
             self.ring_buffer.extend(in_data)

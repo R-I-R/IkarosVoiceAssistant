@@ -1,12 +1,13 @@
 import speech_recognition as sr
-from ./snowboy/ import snowboydecoderIkaros
 import sys
 import signal
 
+sys.path.insert(1,"snowboy/")
+import snowboydecoderIkaros as snowboydecoder
 
 signal.signal(signal.SIGINT, signal_handler)
 
-detector = snowboydecoder.HotwordDetector(sensitivity=0.5)
+detector = snowboydecoder.HotwordDetector("snowboy/models/Ikaros.pmdl",sensitivity=0.5)
 print('Listening... Press Ctrl+C to exit')
 
 # main loop
