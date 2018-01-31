@@ -4,6 +4,34 @@ import signal
 
 sys.path.insert(1,"snowboy/")
 import snowboydecoderIkaros as snowboydecoder
+sys.path.insert(1,"tts/")
+from tts import tts
+
+interrupted = False
+
+
+def signal_handler(signal, frame):
+    global interrupted
+    interrupted = True
+
+
+def interrupt_callback():
+    global interrupted
+    return interrupted
+
+def reconocervoz():
+	r = sr.Recognizer()
+	m = sr.Microphone()
+	with m as source:
+	    print("Say something!")
+	    r.adjust_for_ambient_noise(source)
+	    audio = r.listen(source)
+	try:
+	    print("Google Speech Recognition thinks you said: " + r.recognize_google(audio,language="es-CL"))
+	except sr.UnknownValueError:
+	    print("Google Speech Recognition could not understand audio")
+	except sr.RequestError as e:
+	    print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
 signal.signal(signal.SIGINT, signal_handler)
 
