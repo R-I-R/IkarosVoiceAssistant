@@ -1,5 +1,5 @@
 import speech_recognition as sr
-import ./snowboy/snowboydecoderIkaros
+from ./snowboy/ import snowboydecoderIkaros
 import sys
 import signal
 
