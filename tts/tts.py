@@ -1,11 +1,7 @@
 from __future__ import print_function
 import json
 from os.path import join, dirname, isfile
-from watson_developer_cloud import TextToSpeechV1
-import pyaudio
-import wave
 import sys
-import time
 import os
 
 #print(json.dumps(text_to_speech.voices(), indent=2))
@@ -17,6 +13,8 @@ def tts(nombre):
 		reproducir(archivo)
 	else:
 
+		from watson_developer_cloud import TextToSpeechV1
+		
 		text_to_speech = TextToSpeechV1(
     		username='464a4abf-53b5-4ff7-a578-1330e295512a',
     		password='UygljpTJFaIb',
