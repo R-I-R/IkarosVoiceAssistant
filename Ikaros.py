@@ -24,9 +24,9 @@ def reconocervoz():
 	r = sr.Recognizer()
 	m = sr.Microphone()
 	with m as source:
-	    tts.tts("Lo escucho")
+	    existe = tts.tts("Lo escucho")
 	    r.adjust_for_ambient_noise(source)
-	    #time.sleep(1)
+	    if not existe: time.sleep(1)
 	    audio = r.listen(source)
 	try:
 	    print("Google Speech Recognition thinks you said: " + r.recognize_google(audio,language="es-CL"))

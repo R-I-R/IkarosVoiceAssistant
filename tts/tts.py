@@ -8,9 +8,10 @@ import os
 #print(json.dumps(text_to_speech.pronunciation('Watson', pronunciation_format='spr'), indent=2))
 
 def tts(nombre):
-	archivo = os.getcwd()+"/"+nombre.replace(" ","")+".wav"
+	archivo = os.getcwd()+"/tts/audios/"+nombre.replace(" ","")+".wav"
 	if isfile(archivo):
 		reproducir(archivo)
+		return 1
 	else:
 
 		from watson_developer_cloud import TextToSpeechV1
@@ -24,6 +25,7 @@ def tts(nombre):
 			audio_file.write(text_to_speech.synthesize(nombre, accept='audio/wav',voice="es-ES_EnriqueVoice"))
 			audio_file.close()
 		reproducir(archivo)
+		return 0
 
 def reproducir(file):
 	if os.name == "posix":
