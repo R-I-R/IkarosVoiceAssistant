@@ -6,12 +6,13 @@ import os
 
 #print(json.dumps(text_to_speech.voices(), indent=2))
 #print(json.dumps(text_to_speech.pronunciation('Watson', pronunciation_format='spr'), indent=2))
+equipo = os.name
 
 def tts(nombre):
-	archivo = os.getcwd()+"/tts/audios/"+nombre.replace(" ","")+".wav"
+	if equipo == "posix": archivo = os.getcwd()+"/tts/audios/"+nombre.replace(" ","")+".wav"
+	else : archivo = "audios/"+nombre.replace(" ","")+".wav"
 	if isfile(archivo):
 		reproducir(archivo)
-		return 1
 	else:
 
 		from watson_developer_cloud import TextToSpeechV1
@@ -25,10 +26,9 @@ def tts(nombre):
 			audio_file.write(text_to_speech.synthesize(nombre, accept='audio/wav',voice="es-ES_EnriqueVoice"))
 			audio_file.close()
 		reproducir(archivo)
-		return 0
 
 def reproducir(file):
-	if os.name == "posix":
+	if equipo == "posix":
 		os.system("aplay "+file)
 	else:
 		os.system("start wmplayer "+(os.getcwd()+"\\"+file).replace("/","\\"))
