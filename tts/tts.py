@@ -8,7 +8,7 @@ import os
 #print(json.dumps(text_to_speech.pronunciation('Watson', pronunciation_format='spr'), indent=2))
 
 def tts(nombre):
-	archivo = "audios/"+nombre.replace(" ","")+".wav"
+	archivo = os.getcwd()+"/"+nombre.replace(" ","")+".wav"
 	if isfile(archivo):
 		reproducir(archivo)
 	else:

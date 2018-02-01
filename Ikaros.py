@@ -1,6 +1,7 @@
 import speech_recognition as sr
 import sys
 import signal
+import time
 
 sys.path.insert(1,"snowboy/")
 import snowboydecoderIkaros as snowboydecoder
@@ -25,6 +26,7 @@ def reconocervoz():
 	with m as source:
 	    tts.tts("Lo escucho")
 	    r.adjust_for_ambient_noise(source)
+	    time.sleep(1)
 	    audio = r.listen(source)
 	try:
 	    print("Google Speech Recognition thinks you said: " + r.recognize_google(audio,language="es-CL"))
