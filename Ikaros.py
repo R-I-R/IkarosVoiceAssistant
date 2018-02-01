@@ -43,7 +43,6 @@ print('Listening... Press Ctrl+C to exit')
 # main loop
 detector.start(detected_callback=reconocervoz,
                interrupt_check=interrupt_callback,
-               audio_recorder_callback=audioRecorderCallback,
                sleep_time=0.03)
 
 detector.terminate()

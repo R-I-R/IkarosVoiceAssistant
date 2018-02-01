@@ -30,5 +30,3 @@ def reproducir(file):
 		os.system("aplay "+file)
 	else:
 		os.system("start wmplayer "+(os.getcwd()+"\\"+file).replace("/","\\"))
-
-tts("Hola Mundo")
