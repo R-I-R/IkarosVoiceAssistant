@@ -1,6 +1,7 @@
 import speech_recognition as sr
 import sys
 import signal
+import os
 
 sys.path.insert(1,"snowboy/")
 import snowboydecoderIkarosrecorder as snowboydecoder
@@ -62,6 +63,8 @@ print('Listening... Press Ctrl+C to exit')
 detector.start(detected_callback=snowboydecoder.play_audio_file,
                interrupt_check=interrupt_callback,
                audio_recorder_callback=audioRecorderCallback,
-               sleep_time=0.03)
+               sleep_time=0.03,
+               silent_count_threshold=8,
+               recording_timeout=50)
 
 detector.terminate()
