@@ -14,7 +14,7 @@ def tts(nombre):
 	else:
 
 		from watson_developer_cloud import TextToSpeechV1
-		
+
 		text_to_speech = TextToSpeechV1(
     		username='464a4abf-53b5-4ff7-a578-1330e295512a',
     		password='UygljpTJFaIb',
@@ -26,7 +26,10 @@ def tts(nombre):
 		reproducir(archivo)
 
 def reproducir(file):
-	os.system("aplay "+file)
+	if os.name == "posix":
+		os.system("aplay "+file)
+	else:
+		os.system("start wmplayer "+(os.getcwd()+"\\"+file).replace("/","\\"))
 
 
 tts("Hola Mundo")
