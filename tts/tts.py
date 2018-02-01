@@ -21,7 +21,7 @@ def tts(nombre):
     		x_watson_learning_opt_out=True)  # Optional flag
 
 		with open(join(dirname(__file__), archivo),'wb') as audio_file:
-			audio_file.write(text_to_speech.synthesize(nombre, accept='audio/wav',voice="es-LA_SofiaVoice"))
+			audio_file.write(text_to_speech.synthesize(nombre, accept='audio/wav',voice="es-ES_EnriqueVoice"))
 			audio_file.close()
 		reproducir(archivo)
 
@@ -30,7 +30,4 @@ def reproducir(file):
 		os.system("aplay "+file)
 	else:
 		os.system("start wmplayer "+(os.getcwd()+"\\"+file).replace("/","\\"))
-
-
-tts("Hola Mundo")
 

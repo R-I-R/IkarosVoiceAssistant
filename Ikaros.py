@@ -5,7 +5,7 @@ import signal
 sys.path.insert(1,"snowboy/")
 import snowboydecoderIkaros as snowboydecoder
 sys.path.insert(1,"tts/")
-from tts import tts
+import tts
 
 interrupted = False
 
@@ -23,7 +23,7 @@ def reconocervoz():
 	r = sr.Recognizer()
 	m = sr.Microphone()
 	with m as source:
-	    print("Say something!")
+	    tts.tts("Lo escucho")
 	    r.adjust_for_ambient_noise(source)
 	    audio = r.listen(source)
 	try:
@@ -39,7 +39,7 @@ detector = snowboydecoder.HotwordDetector("snowboy/models/Ikaros.pmdl",sensitivi
 print('Listening... Press Ctrl+C to exit')
 
 # main loop
-detector.start(detected_callback=snowboydecoder.play_audio_file,
+detector.start(detected_callback=reconocervoz,
                interrupt_check=interrupt_callback,
                sleep_time=0.03)
 
