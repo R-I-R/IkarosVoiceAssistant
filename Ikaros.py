@@ -26,7 +26,7 @@ def reconocervoz():
 	with m as source:
 	    tts.tts("Lo escucho")
 	    r.adjust_for_ambient_noise(source)
-	    time.sleep(1)
+	    #time.sleep(1)
 	    audio = r.listen(source)
 	try:
 	    print("Google Speech Recognition thinks you said: " + r.recognize_google(audio,language="es-CL"))
