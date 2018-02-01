@@ -3,7 +3,7 @@ import sys
 import signal
 
 sys.path.insert(1,"snowboy/")
-import snowboydecoderIkaros as snowboydecoder
+import snowboydecoderIkarosrecorder as snowboydecoder
 sys.path.insert(1,"tts/")
 import tts
 
