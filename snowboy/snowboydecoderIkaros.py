@@ -3,12 +3,14 @@
 
 import collections
 import pyaudio
-import snowboydetect
+import imp
 import time
 import wave
 import os
 import logging
 import threading
+
+snowboydetect = imp.load_source('snowboydetect',os.path.dirname(__file__)+'/snowboydetect.py')
 
 logging.basicConfig()
 logger = logging.getLogger("snowboy")
@@ -117,9 +119,9 @@ class HotwordDetector(object):
             stream_callback=audio_callback)
 
 
-    def start(self, detected_callback=play_audio_file,
+    def start(self,evento, detected_callback=play_audio_file,
               interrupt_check=lambda: False,
-              sleep_time=0.03,evento):
+              sleep_time=0.03):
         """
         Start the voice detector. For every `sleep_time` second it checks the
         audio buffer for triggering keywords. If detected, then call
