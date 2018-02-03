@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import speech_recognition as sr
-import sys,imp
+import sys,imp,os
 import signal
 import time
 import threading
