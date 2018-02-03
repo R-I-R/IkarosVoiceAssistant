@@ -37,12 +37,16 @@ def reconocervoz(repetir=True):
 	try:
 		texto = r.recognize_google(audio,language="es-CL")
 		print("Google Speech Recognition thinks you said: "+texto)
-		dialogflow.apiaiquery(texto)
+		IkarosApiAI.query(texto)
 	except sr.UnknownValueError:
 	    tts.tts("Lo siento, no entendí.")
 	    if repetir: reconocervoz(False)
 	except sr.RequestError as e:
 	    print("Could not request results from Google Speech Recognition service; {0}".format(e))
+
+
+Arduino = arduinoCentral("/dev/ttyACM0",9600)
+IkarosApiAI = dialogflow('9d6dd218d16b457499b933d09b834d5d',Arduino)
 
 
 signal.signal(signal.SIGINT, signal_handler)
@@ -55,8 +59,10 @@ def iniciarReconocimientoVoz(evento):
 pararReconocimientoVoz = threading.Event()
 
 hiloReconocimientoVoz = threading.Thread(target=iniciarReconocimientoVoz,args=(pararReconocimientoVoz,),daemon=True)
+hiloMonitoreoArduino = threading.Thread(target=Arduino.monitoreo,daemon=True)
 
 hiloReconocimientoVoz.start()
+hiloMonitoreoArduino.start()
 
 root = Tk()
 Button(root,text="parar reconocimiento de voz",command=pararReconocimientoVoz.set).pack()
