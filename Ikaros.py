@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import speech_recognition as sr
-import sys,imp,os
+import sys
 import signal
 import time
 import threading
-acciones = imp.load_source('acciones',os.path.dirname(__file__)+'/acciones.py')
+import acciones
 from tkinter import *
 
 sys.path.insert(1,"snowboy/")
