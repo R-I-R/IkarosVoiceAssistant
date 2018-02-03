@@ -6,7 +6,7 @@ import sys
 import signal
 import time
 import threading
-import acciones
+from acciones import *
 from tkinter import *
 
 sys.path.insert(1,"snowboy/")
@@ -37,7 +37,7 @@ def reconocervoz(repetir=True):
 	try:
 		texto = r.recognize_google(audio,language="es-CL")
 		print("Google Speech Recognition thinks you said: "+texto)
-		acciones.apiaiquery(texto)
+		dialogflow.apiaiquery(texto)
 	except sr.UnknownValueError:
 	    tts.tts("Lo siento, no entendí.")
 	    if repetir: reconocervoz(False)
