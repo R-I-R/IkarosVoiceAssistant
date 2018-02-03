@@ -9,8 +9,18 @@ import os
 equipo = os.name
 
 def tts(nombre):
-	if equipo == "posix": archivo = os.getcwd()+"/tts/audios/"+nombre.replace(" ","")+".wav"
-	else : archivo = "audios/"+nombre.replace(" ","")+".wav"
+
+	#archivo = ""
+	#for a in nombre:
+	#	if a.isalnum():
+	#		archivo += a
+	#	else:
+	#		if a == "?": archivo += "-"
+
+	archivo = nombre.replace(" ","").replace("?","-").replace(":","").replace("|","").replace("<","").replace(">","").replace("\\","").replace("/","").replace("*","").replace('"',"")
+
+	if equipo == "posix": archivo = os.getcwd()+"/tts/audios/"+archivo+".wav"
+	else : archivo = "audios/"+archivo+".wav"
 	if isfile(archivo):
 		reproducir(archivo)
 	else:
@@ -31,4 +41,7 @@ def reproducir(file):
 	if equipo == "posix":
 		os.system("aplay "+file)
 	else:
-		os.system("start wmplayer "+(os.getcwd()+"\\"+file).replace("/","\\"))
+		if isfile((os.getcwd()+"\\"+file).replace("/","\\")):
+			os.system("start wmplayer "+(os.getcwd()+"\\"+file).replace("/","\\"))
+		else: os.system("start wmplayer "+(os.getcwd()+"\\tts\\"+file).replace("/","\\"))
+
