@@ -10,14 +10,18 @@ equipo = os.name
 
 def tts(nombre):
 
-	#archivo = ""
-	#for a in nombre:
-	#	if a.isalnum():
-	#		archivo += a
-	#	else:
-	#		if a == "?": archivo += "-"
+	archivo = ""
+	for cont,a in enumerate(nombre):
+		if cont > 240: break
+		if a == "ñ" or a == "Ñ":
+			archivo += "n"
+		elif a.isalnum():
+			archivo += a
+		else:
+			if a == "?": archivo += "-"
+			if a == ',' or a == '.': archivo += a
 
-	archivo = nombre.replace(" ","").replace("?","-").replace(":","").replace("|","").replace("<","").replace(">","").replace("\\","").replace("/","").replace("*","").replace('"',"")
+	#archivo = nombre.replace(" ","").replace("?","-").replace(":","").replace("|","").replace("<","").replace(">","").replace("\\","").replace("/","").replace("*","").replace('"',"")
 
 	if equipo == "posix": archivo = os.getcwd()+"/tts/audios/"+archivo+".wav"
 	else : archivo = "audios/"+archivo+".wav"
@@ -44,4 +48,3 @@ def reproducir(file):
 		if isfile((os.getcwd()+"\\"+file).replace("/","\\")):
 			os.system("start wmplayer "+(os.getcwd()+"\\"+file).replace("/","\\"))
 		else: os.system("start wmplayer "+(os.getcwd()+"\\tts\\"+file).replace("/","\\"))
-
