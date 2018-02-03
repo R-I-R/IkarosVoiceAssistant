@@ -6,7 +6,7 @@ import sys
 import signal
 import time
 import threading
-from . import acciones
+acciones = imp.load_source('acciones',os.path.dirname(__file__)+'/acciones.py')
 from tkinter import *
 
 sys.path.insert(1,"snowboy/")
