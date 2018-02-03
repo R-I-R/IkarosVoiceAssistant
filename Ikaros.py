@@ -5,6 +5,7 @@ import speech_recognition as sr
 import sys
 import signal
 import time
+import threading
 
 sys.path.insert(1,"snowboy/")
 import snowboydecoderIkaros as snowboydecoder
@@ -23,7 +24,7 @@ def interrupt_callback():
     global interrupted
     return interrupted
 
-def reconocervoz():
+def reconocervoz(repetir=True):
 	r = sr.Recognizer()
 	m = sr.Microphone()
 	with m as source:
@@ -34,20 +35,22 @@ def reconocervoz():
 	try:
 	    print("Google Speech Recognition thinks you said: " + r.recognize_google(audio,language="es-CL"))
 	except sr.UnknownValueError:
-	    print("Google Speech Recognition could not understand audio")
+	    tts.tts("Lo siento, no entendí.")
+	    if repetir: reconocervoz(False)
 	except sr.RequestError as e:
 	    print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
 
 
+
 signal.signal(signal.SIGINT, signal_handler)
-
 detector = snowboydecoder.HotwordDetector("snowboy/models/Ikaros.pmdl",sensitivity=0.5)
-print('Listening... Press Ctrl+C to exit')
 
-# main loop
-detector.start(detected_callback=reconocervoz,
-               interrupt_check=interrupt_callback,
-               sleep_time=0.03)
 
-detector.terminate()
+hiloReconocimientoVoz = threading.Thread(target=detector.start(detected_callback=reconocervoz,interrupt_check=interrupt_callback,sleep_time=0.03),daemon=True)
+
+
+
+
+if not hiloReconocimientoVoz.isAlive():
+	detector.terminate()
