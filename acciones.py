@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import sys,json,apiai
 
 sys.path.insert(1,"tts/")
