@@ -41,16 +41,18 @@ def reconocervoz(repetir=True):
 	    print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
 
-
-
-signal.signal(signal.SIGINT, signal_handler)
-detector = snowboydecoder.HotwordDetector("snowboy/models/Ikaros.pmdl",sensitivity=0.5)
-
-
-hiloReconocimientoVoz = threading.Thread(target=detector.start(detected_callback=reconocervoz,interrupt_check=interrupt_callback,sleep_time=0.03),daemon=True)
-
-
-
-
-if not hiloReconocimientoVoz.isAlive():
+def iniciarReconocimientoVoz():
+	signal.signal(signal.SIGINT, signal_handler)
+	detector = snowboydecoder.HotwordDetector("snowboy/models/Ikaros.pmdl",sensitivity=0.5)
+	detector.start(detected_callback=reconocervoz,interrupt_check=interrupt_callback,sleep_time=0.03)
 	detector.terminate()
+
+
+
+
+hiloReconocimientoVoz = threading.Thread(target=iniciarReconocimientoVoz,daemon=True)
+
+
+
+
+
