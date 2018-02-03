@@ -36,8 +36,8 @@ def reconocervoz(repetir=True):
 	    audio = r.listen(source)
 	try:
 		texto = r.recognize_google(audio,language="es-CL")
-	    print("Google Speech Recognition thinks you said: "+texto)
-	    acciones.apiaiquery(texto)
+		print("Google Speech Recognition thinks you said: "+texto)
+		acciones.apiaiquery(texto)
 	except sr.UnknownValueError:
 	    tts.tts("Lo siento, no entendí.")
 	    if repetir: reconocervoz(False)
