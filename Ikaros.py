@@ -6,6 +6,7 @@ import sys
 import signal
 import time
 import threading
+from tkinter import *
 
 sys.path.insert(1,"snowboy/")
 import snowboydecoderIkaros as snowboydecoder
@@ -41,18 +42,20 @@ def reconocervoz(repetir=True):
 	    print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
 
-def iniciarReconocimientoVoz():
-	signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGINT, signal_handler)
+def iniciarReconocimientoVoz(evento):
 	detector = snowboydecoder.HotwordDetector("snowboy/models/Ikaros.pmdl",sensitivity=0.5)
-	detector.start(detected_callback=reconocervoz,interrupt_check=interrupt_callback,sleep_time=0.03)
+	detector.start(detected_callback=reconocervoz,interrupt_check=interrupt_callback,sleep_time=0.03,evento=evento)
 	detector.terminate()
 
 
+pararReconocimientoVoz = threading.Event()
 
+hiloReconocimientoVoz = threading.Thread(target=iniciarReconocimientoVoz,args=(pararReconocimientoVoz,),daemon=True)
 
-hiloReconocimientoVoz = threading.Thread(target=iniciarReconocimientoVoz,daemon=True)
+hiloReconocimientoVoz.start()
 
-
-
-
+root = Tk()
+Button(root,text="parar reconocimiento de voz",command=pararReconocimientoVoz.set).pack()
+root.mainloop()
 

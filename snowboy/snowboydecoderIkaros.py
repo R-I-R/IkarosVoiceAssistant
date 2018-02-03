@@ -8,6 +8,7 @@ import time
 import wave
 import os
 import logging
+import threading
 
 logging.basicConfig()
 logger = logging.getLogger("snowboy")
@@ -118,7 +119,7 @@ class HotwordDetector(object):
 
     def start(self, detected_callback=play_audio_file,
               interrupt_check=lambda: False,
-              sleep_time=0.03):
+              sleep_time=0.03,evento):
         """
         Start the voice detector. For every `sleep_time` second it checks the
         audio buffer for triggering keywords. If detected, then call
@@ -139,6 +140,9 @@ class HotwordDetector(object):
             logger.debug("detect voice return")
             return
 
+        if evento.is_set():
+            return
+
         tc = type(detected_callback)
         if tc is not list:
             detected_callback = [detected_callback]
@@ -154,6 +158,8 @@ class HotwordDetector(object):
         while True:
             if interrupt_check():
                 logger.debug("detect voice break")
+                break
+            if evento.is_set():
                 break
             data = self.ring_buffer.get()
             if len(data) == 0:
