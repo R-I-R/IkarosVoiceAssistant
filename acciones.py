@@ -37,26 +37,26 @@ class dialogflow:
 	def usar_modulos(self,parametros):
 		if parametros["modulos"] == "luz":
 			if parametros["estados"] == "on":
-				arduino.enviarmsg("prender luces pieza")
-			else: arduino.enviarmsg("apagar luces pieza")
+				self.arduino.enviarmsg("prender luces pieza")
+			else: self.arduino.enviarmsg("apagar luces pieza")
 		elif parametros["modulos"] == "cortina":
 			if parametros["number"] == '':
 				if parametros["estados"] == "on":
-					arduino.enviarmsg("abrir cortinas pieza")
-				else: arduino.enviarmsg("cerrar cortinas pieza")
-			else: arduino.enviarmsg("cortinas pieza al "+parametros["number"])
+					self.arduino.enviarmsg("abrir cortinas pieza")
+				else: self.arduino.enviarmsg("cerrar cortinas pieza")
+			else: self.arduino.enviarmsg("cortinas pieza al "+parametros["number"])
 		
 		if parametros["modulos1"] != "":
 			if parametros["modulos1"] == "luz":
 				if parametros["estados1"] == "on":
-					arduino.enviarmsg("prender luces pieza")
-				else: arduino.enviarmsg("apagar luces pieza")
+					self.arduino.enviarmsg("prender luces pieza")
+				else: self.arduino.enviarmsg("apagar luces pieza")
 			elif parametros["modulos1"] == "cortina":
 				if parametros["number"] == '':
 					if parametros["estados1"] == "on":
-						arduino.enviarmsg("abrir cortinas pieza")
-					else: arduino.enviarmsg("cerrar cortinas pieza")
-				else: arduino.enviarmsg("cortinas pieza al "+parametros["number"])
+						self.arduino.enviarmsg("abrir cortinas pieza")
+					else: self.arduino.enviarmsg("cerrar cortinas pieza")
+				else: self.arduino.enviarmsg("cortinas pieza al "+parametros["number"])
 
 
 class arduinoCentral:
