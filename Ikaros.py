@@ -51,7 +51,7 @@ IkarosApiAI = dialogflow('9d6dd218d16b457499b933d09b834d5d',Arduino)
 
 signal.signal(signal.SIGINT, signal_handler)
 def iniciarReconocimientoVoz(evento):
-	detector = snowboydecoder.HotwordDetector("snowboy/models/Ikaros.pmdl",sensitivity=0.5)
+	detector = snowboydecoder.HotwordDetector("snowboy/models/Ikaros.pmdl",sensitivity=0.4)
 	detector.start(detected_callback=reconocervoz,interrupt_check=interrupt_callback,sleep_time=0.03,evento=evento)
 	detector.terminate()
 
