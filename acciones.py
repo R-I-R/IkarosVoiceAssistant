@@ -45,7 +45,7 @@ class dialogflow:
 					self.arduino.enviarmsg("abrir cortinas pieza")
 				else: self.arduino.enviarmsg("cerrar cortinas pieza")
 			else: self.arduino.enviarmsg("cortinas pieza al "+parametros["number"])
-		
+		time.sleep(0.1)
 		if parametros["modulos1"] != "":
 			if parametros["modulos1"] == "luz":
 				if parametros["estados1"] == "on":
