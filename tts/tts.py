@@ -51,3 +51,4 @@ def reproducir(file):
 		if isfile((os.getcwd()+"\\"+file).replace("/","\\")):
 			os.system("start wmplayer "+(os.getcwd()+"\\"+file).replace("/","\\"))
 		else: os.system("start wmplayer "+(os.getcwd()+"\\tts\\"+file).replace("/","\\"))
+

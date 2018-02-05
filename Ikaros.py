@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import RPi.GPIO as GPIO
 import speech_recognition as sr
 import sys
 import signal
@@ -15,7 +16,9 @@ sys.path.insert(1,"tts/")
 import tts
 
 interrupted = False
-
+dia = True
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17, GPIO.OUT)
 
 def signal_handler(signal, frame):
     global interrupted
@@ -37,13 +40,22 @@ def reconocervoz(repetir=True):
 	try:
 		texto = r.recognize_google(audio,language="es-CL")
 		print("Google Speech Recognition thinks you said: "+texto)
-		IkarosApiAI.query(texto)
+		if texto == "Buenos días":buenosDias()
+		elif texto == "buenas noches":buenasNoches()
+		else: IkarosApiAI.query(texto)
 	except sr.UnknownValueError:
 	    tts.tts("Lo siento, no entendí.")
 	    if repetir: reconocervoz(False)
 	except sr.RequestError as e:
 	    print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
+
+def buenosDias():
+	dia = True
+	GPIO.output(17, True)
+def buenasNoches():
+	dia = False
+	GPIO.output(17, False)
 
 Arduino = arduinoCentral("/dev/ttyACM0",9600)
 IkarosApiAI = dialogflow('9d6dd218d16b457499b933d09b834d5d',Arduino)
@@ -68,3 +80,4 @@ root = Tk()
 Button(root,text="parar reconocimiento de voz",command=pararReconocimientoVoz.set).pack()
 root.mainloop()
 
+GPIO.cleanup()
