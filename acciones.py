@@ -84,6 +84,7 @@ class arduinoCentral:
 
 	def enviarmsg(self,msg):
 		self.envio = 1
+		time.sleep(0.1)
 		self.arduino.write(msg.encode())
 		self.ultimaOrden = msg
 		#self.tiempo = time.time()
