@@ -47,7 +47,7 @@ def reconocervoz(repetir=True):
 	    tts.tts("Lo siento, no entendí.")
 	    if repetir: reconocervoz(False)
 	except sr.RequestError as e:
-	    print("Could not request results from Google Speech Recognition service; {0}".format(e))
+	    tts.tts("no hay respuesta de Google")
 
 
 def buenosDias():
@@ -57,15 +57,24 @@ def buenasNoches():
 	dia = False
 	GPIO.output(17, False)
 
-Arduino = arduinoCentral("/dev/ttyACM0",9600)
+Arduino = arduinoCentral("/dev/ttyACM0",9600,timeout=2)
 IkarosApiAI = dialogflow('9d6dd218d16b457499b933d09b834d5d',Arduino)
 
 
 signal.signal(signal.SIGINT, signal_handler)
 def iniciarReconocimientoVoz(evento):
-	detector = snowboydecoder.HotwordDetector("snowboy/models/Ikaros.pmdl",sensitivity=0.4)
+	global BrevivirReconocimientoVoz
+	evento.clear()
+	detector = snowboydecoder.HotwordDetector("snowboy/models/Ikaros.pmdl",sensitivity=0.35)
 	detector.start(detected_callback=reconocervoz,interrupt_check=interrupt_callback,sleep_time=0.03,evento=evento)
 	detector.terminate()
+	BrevivirReconocimientoVoz.config(state="normal")
+
+def revivirReconocimientoVoz():
+	global hiloReconocimientoVoz,pararReconocimientoVoz
+	pararReconocimientoVoz.clear()
+	hiloReconocimientoVoz = threading.Thread(target=iniciarReconocimientoVoz,args=(pararReconocimientoVoz,),daemon=True)
+	hiloReconocimientoVoz.start
 
 
 pararReconocimientoVoz = threading.Event()
@@ -78,6 +87,8 @@ hiloMonitoreoArduino.start()
 
 root = Tk()
 Button(root,text="parar reconocimiento de voz",command=pararReconocimientoVoz.set).pack()
+BrevivirReconocimientoVoz = Button(root,text="iniciar reconocimiento de voz",command=revivirReconocimientoVoz,state="disabled")
+BrevivirReconocimientoVoz.pack()
 root.mainloop()
 
-GPIO.cleanup()
+#GPIO.cleanup()

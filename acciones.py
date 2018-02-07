@@ -36,27 +36,15 @@ class dialogflow:
 
 	def usar_modulos(self,parametros):
 		if parametros["modulos"] == "luz":
-			if parametros["estados"] == "on":
-				self.arduino.enviarmsg("prender luces pieza")
-			else: self.arduino.enviarmsg("apagar luces pieza")
+			self.arduino.luces(parametros["estados"])
 		elif parametros["modulos"] == "cortina":
-			if parametros["number"] == '':
-				if parametros["estados"] == "on":
-					self.arduino.enviarmsg("abrir cortinas pieza")
-				else: self.arduino.enviarmsg("cerrar cortinas pieza")
-			else: self.arduino.enviarmsg("cortinas pieza al "+parametros["number"])
+			self.arduino.cortinas(parametros["estados"],parametros["number"])
 		time.sleep(0.1)
 		if parametros["modulos1"] != "":
 			if parametros["modulos1"] == "luz":
-				if parametros["estados1"] == "on":
-					self.arduino.enviarmsg("prender luces pieza")
-				else: self.arduino.enviarmsg("apagar luces pieza")
+				self.arduino.luces(parametros["estados"])
 			elif parametros["modulos1"] == "cortina":
-				if parametros["number"] == '':
-					if parametros["estados1"] == "on":
-						self.arduino.enviarmsg("abrir cortinas pieza")
-					else: self.arduino.enviarmsg("cerrar cortinas pieza")
-				else: self.arduino.enviarmsg("cortinas pieza al "+parametros["number"])
+				self.arduino.cortinas(parametros["estados"],parametros["number"])
 
 
 class arduinoCentral:
@@ -65,8 +53,10 @@ class arduinoCentral:
 		self.arduino = serial.Serial(puerto, vel)
 
 	def monitoreo(self):
+		envios = 0
 		while True:
 			if self.envio > 1:
+				#if self.tiempo+2 > time.time():
 				msg = self.arduino.readline().decode()[:-2]
 				tts.tts(msg)
 
@@ -75,20 +65,29 @@ class arduinoCentral:
 				print(msg)
 
 	def enviarmsg(self,msg):
-		self.envio = 1
 		self.arduino.write(msg.encode())
 		self.envio = 2
+		#self.tiempo = time.time()
+
+	def cortinas(self,estado,number,place="pieza"):
+		if number != '':
+			print("cortina",place,number)
+		else:
+			print("cortina",place,estado)
+
+	def luces(self,estado,place="pieza"):
+		print("luz",place,estado)
 
 	def __del__(self):
 		self.arduino.close()
 
 
 
-
+#arduino = arduinoCentral("","")
 #print("creando dialogflow")
-#IkarosApiAI = dialogflow(ClientId='9d6dd218d16b457499b933d09b834d5d')
+#IkarosApiAI = dialogflow('9d6dd218d16b457499b933d09b834d5d',arduino)
 #print("enviando query")
-#IkarosApiAI.query("abre las cortinas al 60% y apaga las luces")
+#IkarosApiAI.query("abre las cortinas y prende las luces")
 #time.sleep(5)
 #print("enviando query2")
 #IkarosApiAI.query("desactiva las luces y abre las cortinas al 95%")

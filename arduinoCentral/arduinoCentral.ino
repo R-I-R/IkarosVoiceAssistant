@@ -65,12 +65,22 @@ void loop() {
   }else if(packetSize == sizeof(CortinasPiezaDato)){
     radio.readData(&CortinasPiezaDato);
     if(!avisocortinas){
-      Serial.println("...");
+      if(CortinasPiezaDato.pos == 100) Serial.println("Abriendo cortinas");
+      else if(CortinasPiezaDato.pos == 0) Serial.println("Cerrando cortinas");
+      else{
+        String temps = "Moviendo cortinas al ";
+        temps += CortinasPiezaDato.pos + "%";
+        Serial.println(temps);
+      }
       avisocortinas = true;
     }else{
-      if(CortinasPiezaDato.pos) Serial.println("Cortinas Abiertas");
-      else Serial.println("Cortinas Cerradas");
-      avisocortinas = false;
+      if(CortinasPiezaDato.pos == 100) Serial.println("Cortinas abiertas");
+      else if(CortinasPiezaDato.pos == 0) Serial.println("Cortinas Cerradas");
+      else{
+        String temps = "cortinas al ";
+        temps += CortinasPiezaDato.pos + "%";
+        Serial.println(temps);
+      }
     }
   }
   
@@ -78,24 +88,20 @@ void loop() {
   
   if(Serial.available()){
     String serial = Serial.readString();
-    if(serial.equals("prender luces pieza")){
-      Serial.println("prendiendo luces");
+    if(serial.equals("luz pieza on")){
       SLuzPiezaDato.estado = 1;
       enviar(LuzPieza,SLuzPiezaDato);
-    }else if(serial.equals("apagar luces pieza")){
-      Serial.println("apagando luces");
+    }else if(serial.equals("luz pieza off")){
       SLuzPiezaDato.estado = 0;
       enviar(LuzPieza,SLuzPiezaDato);
-    }else if(serial.equals("abrir cortinas pieza")){
-      Serial.print("Abriendo cortinas");
+    }else if(serial.equals("cortina pieza on")){
       CortinasPiezaDato.pos = 100;
       radio.send(CortinasPieza,&CortinasPiezaDato, sizeof(CortinasPiezaDato));
-    }else if(serial.equals("cerrar cortinas pieza")){
-      Serial.print("cerrando cortinas");
+    }else if(serial.equals("cortina pieza off")){
       CortinasPiezaDato.pos = 0;
       radio.send(CortinasPieza,&CortinasPiezaDato, sizeof(CortinasPiezaDato));
-    }else if(serial.substring(0,18).equals("cortinas pieza al ")){
-      int x = serial.substring(18).toInt();
+    }else if(serial.substring(0,14).equals("cortina pieza ")){
+      int x = serial.substring(14).toInt();
       delay(50);
       Serial.print("Moviendo cortinas al ");Serial.print(x);Serial.print("%");
       CortinasPiezaDato.pos = x;
