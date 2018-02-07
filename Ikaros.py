@@ -55,12 +55,17 @@ def buenosDias():
 	dia = True
 	GPIO.output(17, True)
 	tts.tts("buenos díasseñor")
-	hiloTemporal.cancel()
+	IkarosApiAI.query("prende la luz y abre la cortina")
+	try:
+		hiloTemporal.cancel()
+	except:
+		pass
 def buenasNoches():
 	global hiloTemporal
 	dia = False
 	GPIO.output(17, False)
 	tts.tts("buenas noches señor")
+	IkarosApiAI.query("apaga la luz y cierra la cortina")
 	hiloTemporal = threading.Timer(7200, GPIO.output,args=(17,True))
 	hiloTemporal.start()
 
@@ -72,7 +77,7 @@ signal.signal(signal.SIGINT, signal_handler)
 def iniciarReconocimientoVoz(evento):
 	global BrevivirReconocimientoVoz
 	evento.clear()
-	detector = snowboydecoder.HotwordDetector("snowboy/models/Ikaros.pmdl",sensitivity=0.36)
+	detector = snowboydecoder.HotwordDetector("snowboy/models/Ikaros.pmdl",sensitivity=0.35)
 	detector.start(detected_callback=reconocervoz,interrupt_check=interrupt_callback,sleep_time=0.03,evento=evento)
 	detector.terminate()
 	BrevivirReconocimientoVoz.config(state="normal")
