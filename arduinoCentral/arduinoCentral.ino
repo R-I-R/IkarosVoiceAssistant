@@ -103,7 +103,6 @@ void loop() {
     }else if(serial.substring(0,14).equals("cortina pieza ")){
       int x = serial.substring(14).toInt();
       delay(50);
-      Serial.print("Moviendo cortinas al ");Serial.print(x);Serial.print("%");
       CortinasPiezaDato.pos = x;
       radio.send(CortinasPieza,&CortinasPiezaDato,sizeof(CortinasPiezaDato));
     }

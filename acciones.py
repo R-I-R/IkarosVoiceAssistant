@@ -50,7 +50,7 @@ class dialogflow:
 class arduinoCentral:
 	envio = 0
 	def __init__(self,puerto,vel):
-		self.arduino = serial.Serial(puerto, vel)
+		self.arduino = serial.Serial(puerto, vel,timeout=2)
 
 	def monitoreo(self):
 		envios = 0

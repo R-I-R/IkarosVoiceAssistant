@@ -57,7 +57,7 @@ def buenasNoches():
 	dia = False
 	GPIO.output(17, False)
 
-Arduino = arduinoCentral("/dev/ttyACM0",9600,timeout=2)
+Arduino = arduinoCentral("/dev/ttyACM0",9600)
 IkarosApiAI = dialogflow('9d6dd218d16b457499b933d09b834d5d',Arduino)
 
 
