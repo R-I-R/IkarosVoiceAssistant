@@ -53,9 +53,12 @@ def reconocervoz(repetir=True):
 def buenosDias():
 	dia = True
 	GPIO.output(17, True)
+	tts.tts("buenos díasseñor")
 def buenasNoches():
 	dia = False
 	GPIO.output(17, False)
+	tts.tts("buenas noches señor")
+	buenasNochesHilo = threading.Timer(7200, GPIO.output,args=(17,True))
 
 Arduino = arduinoCentral("/dev/ttyACM0",9600)
 IkarosApiAI = dialogflow('9d6dd218d16b457499b933d09b834d5d',Arduino)
