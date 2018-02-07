@@ -49,8 +49,9 @@ class dialogflow:
 
 class arduinoCentral:
 	envio = 0
+	ultimaOrden = ''
 	def __init__(self,puerto,vel):
-		self.arduino = serial.Serial(puerto, vel,timeout=2)
+		self.arduino = serial.Serial(puerto, vel,timeout=2.5)
 
 	def monitoreo(self):
 		envios = 0
@@ -60,8 +61,10 @@ class arduinoCentral:
 				msg = self.arduino.readline().decode()[:-2]
 				if msg != '':
 					tts.tts(msg)
-					envio = 0
-				else: envios += 1
+					self.envio = 0
+				else:
+					envios += 1
+					enviarmsg(ultimaOrden)
 
 			else:
 				msg = self.arduino.readline().decode()[:-2]
@@ -71,11 +74,12 @@ class arduinoCentral:
 			if envios >= 3:
 				tts.tts("No se ha podido comunicar con el módulo")
 				envios = 0
-				envio = 0
+				self.envio = 0
 
 	def enviarmsg(self,msg):
-		self.arduino.write(msg.encode())
 		self.envio = 1
+		self.arduino.write(msg.encode())
+		ultimaOrden = msg
 		#self.tiempo = time.time()
 
 	def cortinas(self,estado,number,place="pieza"):
