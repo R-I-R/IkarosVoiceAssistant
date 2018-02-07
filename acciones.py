@@ -50,21 +50,27 @@ class dialogflow:
 class arduinoCentral:
 	envio = 0
 	ultimaOrden = ''
+	respuestas = 1
+
 	def __init__(self,puerto,vel):
 		self.arduino = serial.Serial(puerto, vel,timeout=2.5)
 
 	def monitoreo(self):
 		envios = 0
+		contRespuestas = 0
 		while True:
 			if self.envio:
 				#if self.tiempo+2 > time.time():
 				msg = self.arduino.readline().decode()[:-2]
 				if msg != '':
 					tts.tts(msg)
-					self.envio = 0
+					contRespuestas += 1
+					if contRespuestas >= self.respuestas:
+						self.envio = 0
+						contRespuestas = 0
 				else:
 					envios += 1
-					enviarmsg(ultimaOrden)
+					self.enviarmsg(self.ultimaOrden)
 
 			else:
 				msg = self.arduino.readline().decode()[:-2]
@@ -79,16 +85,18 @@ class arduinoCentral:
 	def enviarmsg(self,msg):
 		self.envio = 1
 		self.arduino.write(msg.encode())
-		ultimaOrden = msg
+		self.ultimaOrden = msg
 		#self.tiempo = time.time()
 
 	def cortinas(self,estado,number,place="pieza"):
+		self.respuestas = 2
 		if number != '':
 			self.enviarmsg("cortina {} {}".format(place,number))
 		else:
 			self.enviarmsg("cortina {} {}".format(place,estado))
 
 	def luces(self,estado,place="pieza"):
+		self.respuestas = 1
 		self.enviarmsg("luz {} {}".format(place,estado))
 
 	def __del__(self):
