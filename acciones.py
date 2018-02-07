@@ -80,12 +80,12 @@ class arduinoCentral:
 
 	def cortinas(self,estado,number,place="pieza"):
 		if number != '':
-			self.enviarmsg("cortina",place,number)
+			self.enviarmsg("cortina {} {}".format(place,number))
 		else:
-			self.enviarmsg("cortina",place,estado)
+			self.enviarmsg("cortina {} {}".format(place,estado))
 
 	def luces(self,estado,place="pieza"):
-		self.enviarmsg("luz",place,estado)
+		self.enviarmsg("luz {} {}".format(place,estado))
 
 	def __del__(self):
 		self.arduino.close()
