@@ -55,28 +55,37 @@ class arduinoCentral:
 	def monitoreo(self):
 		envios = 0
 		while True:
-			if self.envio > 1:
+			if self.envio:
 				#if self.tiempo+2 > time.time():
 				msg = self.arduino.readline().decode()[:-2]
-				tts.tts(msg)
+				if msg != '':
+					tts.tts(msg)
+					envio = 0
+				else: envios += 1
 
 			else:
 				msg = self.arduino.readline().decode()[:-2]
-				print(msg)
+				if msg != '':
+					print(msg)
+
+			if envios >= 3:
+				tts.tts("No se ha podido comunicar con el módulo")
+				envios = 0
+				envio = 0
 
 	def enviarmsg(self,msg):
 		self.arduino.write(msg.encode())
-		self.envio = 2
+		self.envio = 1
 		#self.tiempo = time.time()
 
 	def cortinas(self,estado,number,place="pieza"):
 		if number != '':
-			print("cortina",place,number)
+			self.enviarmsg("cortina",place,number)
 		else:
-			print("cortina",place,estado)
+			self.enviarmsg("cortina",place,estado)
 
 	def luces(self,estado,place="pieza"):
-		print("luz",place,estado)
+		self.enviarmsg("luz",place,estado)
 
 	def __del__(self):
 		self.arduino.close()
