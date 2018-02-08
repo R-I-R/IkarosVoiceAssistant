@@ -70,9 +70,9 @@ class arduinoCentral:
 						self._timeout = 60
 						envios = 0
 					if contRespuestas >= self.respuestas:
+						self._timeout = 0.1
 						self.envio = 0
 						contRespuestas = 0
-						self._timeout = 0.1
 						self.respuestas = 0
 						continue
 				else:
@@ -81,6 +81,7 @@ class arduinoCentral:
 
 				if envios >= 4:
 					tts.tts("No se ha podido comunicar con el módulo")
+					self._timeout = 0.1
 					envios = 0
 					self.envio = 0
 
