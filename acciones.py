@@ -12,6 +12,7 @@ class dialogflow:
 		self.request = self.ai.text_request()
 		self.arduino = arduino
 		self.controlarVolumen(0,{"number":'30',"valores":''},voz=False)
+		self.silencioAbsolutov = False
 		
 
 	def query(self,texto):
