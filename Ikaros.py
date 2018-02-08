@@ -42,6 +42,7 @@ def reconocervoz(repetir=True):
 		print("Google Speech Recognition thinks you said: "+texto)
 		if texto == "Buenos días":buenosDias()
 		elif texto == "buenas noches":buenasNoches()
+		elif texto == "silencio absoluto":IkarosApiAI.silencioAbsoluto(GPIO.output,17)
 		else: IkarosApiAI.query(texto)
 	except sr.UnknownValueError:
 	    tts.tts("Lo siento, no entendí.")
@@ -57,10 +58,9 @@ def buenosDias():
 	IkarosApiAI.controlarVolumen(0,{"number":'60',"valores":''},voz=False)
 	tts.tts("buenos díasseñor")
 	IkarosApiAI.query("prende la luz y abre la cortina")
-	try:
-		hiloTemporal.cancel()
-	except:
-		pass
+	try: hiloTemporal.cancel()
+	except: pass
+
 def buenasNoches():
 	global hiloTemporal
 	dia = False

@@ -50,11 +50,16 @@ class dialogflow:
 				self.arduino.cortinas(parametros["estados"],parametros["number"])
 
 	def controlarVolumen(self,tipo,parametros,voz=True):
+		if self.silencioAbsolutov:
+			self.silencioAbsolutov = False
+			self.gpio(self.pinventilador,True)
+			os.system("amixer sset Master {}%".format(self.volumen))
+
 		if tipo < 0:
 			if parametros["number"] != '':
 				number = mapAround(parametros["number"],0,100,34,100)
 				os.system("amixer sset Master {}%-".format(number))
-				self.volumen -= parametros["number"]
+				self.volumen -= int(parametros["number"])
 			else:
 				os.system("amixer sset Master 7%-")
 				self.volumen -= 10
@@ -62,7 +67,7 @@ class dialogflow:
 			if parametros["number"] != '':
 				number = mapAround(parametros["number"],0,100,34,100)
 				os.system("amixer sset Master {}%+".format(number))
-				self.volumen += parametros["number"]
+				self.volumen += int(parametros["number"])
 			else:
 				os.system("amixer sset Master 7%+")
 				self.volumen += 10
@@ -70,13 +75,19 @@ class dialogflow:
 			if parametros["number"] != '':
 				number = mapAround(parametros["number"],0,100,34,100)
 				os.system("amixer sset Master {}%".format(number))
-				self.volumen = parametros["number"]
+				self.volumen = int(parametros["number"])
 			elif parametros["valores"] != '':
 				valores = mapAround(parametros["valores"],0,100,34,100)
 				os.system("amixer sset Master {}%-".format(valores))
-				self.volumen = parametros["valores"]
+				self.volumen = int(parametros["valores"])
 		if voz: tts.tts("volumen al {}% señor".format(self.volumen))
 
+	def silencioAbsoluto(command,arg):
+		self.gpio = command
+		self.pinventilador = arg
+		os.system("amixer sset Master 0%")
+		command(arg,False)
+		self.silencioAbsolutov = True
 
 
 class arduinoCentral:
