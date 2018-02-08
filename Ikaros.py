@@ -42,7 +42,7 @@ def reconocervoz(repetir=True):
 		print("Google Speech Recognition thinks you said: "+texto)
 		if texto == "Buenos días":buenosDias()
 		elif texto == "buenas noches":buenasNoches()
-		elif texto == "silencio absoluto": IkarosApiAI.silencioAbsoluto(ventilador)
+		elif texto == "silencio absoluto": IkarosApiAI.silencioAbsoluto()
 		else: IkarosApiAI.query(texto)
 	except sr.UnknownValueError:
 	    tts.tts("Lo siento, no entendí.")
