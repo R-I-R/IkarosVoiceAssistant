@@ -54,6 +54,7 @@ def buenosDias():
 	global hiloTemporal
 	dia = True
 	GPIO.output(17, True)
+	IkarosApiAI.controlarVolumen(0,{"number":'60',"valores":''},voz=False)
 	tts.tts("buenos díasseñor")
 	IkarosApiAI.query("prende la luz y abre la cortina")
 	try:
@@ -64,6 +65,7 @@ def buenasNoches():
 	global hiloTemporal
 	dia = False
 	GPIO.output(17, False)
+	IkarosApiAI.controlarVolumen(0,{"number":'30',"valores":''},voz=False)
 	tts.tts("buenas noches señor")
 	IkarosApiAI.query("apaga la luz y cierra la cortina")
 	hiloTemporal = threading.Timer(7200, GPIO.output,args=(17,True))
@@ -87,6 +89,7 @@ def revivirReconocimientoVoz():
 	pararReconocimientoVoz.clear()
 	hiloReconocimientoVoz = threading.Thread(target=iniciarReconocimientoVoz,args=(pararReconocimientoVoz,),daemon=True)
 	hiloReconocimientoVoz.start()
+	BrevivirReconocimientoVoz.config(state="disabled")
 
 
 pararReconocimientoVoz = threading.Event()

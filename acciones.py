@@ -11,6 +11,7 @@ class dialogflow:
 		self.ai = apiai.ApiAI(ClientId)
 		self.request = self.ai.text_request()
 		self.arduino = arduino
+		self.controlarVolumen(0,{"number":'30',"valores":''},voz=False)
 		
 
 	def query(self,texto):
@@ -23,14 +24,16 @@ class dialogflow:
 		else:
 			query = json.loads(response.read())["result"]
 
-		print("{}--------{}".format(query["metadata"]["intentName"],query["parameters"]))
+		intencion = query["metadata"]["intentName"]
 
 		if query["fulfillment"]["speech"] != "":
 			#print(query["fulfillment"]["speech"])
 			tts.tts(query["fulfillment"]["speech"])
 
-		if query["metadata"]["intentName"] == "usar_modulos":
-			self.usar_modulos(query["parameters"])
+		if intencion == "usar_modulos": self.usar_modulos(query["parameters"])
+		elif intencion == "volumen": self.controlarVolumen(0,query["parameters"])
+		elif intencion == "bajar_volumen": self.controlarVolumen(-1,query["parameters"])
+		elif intencion == "subir_volumen": self.controlarVolumen(1,query["parameters"])
 			
 		self.request = self.ai.text_request()
 
@@ -45,6 +48,35 @@ class dialogflow:
 				self.arduino.luces(parametros["estados"])
 			elif parametros["modulos1"] == "cortina":
 				self.arduino.cortinas(parametros["estados"],parametros["number"])
+
+	def controlarVolumen(self,tipo,parametros,voz=True):
+		if tipo < 0:
+			if parametros["number"] != '':
+				number = mapAround(parametros["number"],0,100,34,100)
+				os.system("amixer sset Master {}%-".format(number))
+				self.volumen -= parametros["number"]
+			else:
+				os.system("amixer sset Master 7%-")
+				self.volumen -= 10
+		if tipo > 0:
+			if parametros["number"] != '':
+				number = mapAround(parametros["number"],0,100,34,100)
+				os.system("amixer sset Master {}%+".format(number))
+				self.volumen += parametros["number"]
+			else:
+				os.system("amixer sset Master 7%+")
+				self.volumen += 10
+		else:
+			if parametros["number"] != '':
+				number = mapAround(parametros["number"],0,100,34,100)
+				os.system("amixer sset Master {}%".format(number))
+				self.volumen = parametros["number"]
+			elif parametros["valores"] != '':
+				valores = mapAround(parametros["valores"],0,100,34,100)
+				os.system("amixer sset Master {}%-".format(valores))
+				self.volumen = parametros["valores"]
+		if voz: tts.tts("volumen al {}% señor".format(self.volumen))
+
 
 
 class arduinoCentral:
@@ -116,6 +148,12 @@ class arduinoCentral:
 	def setTimeout(self,tiempo):
 		self.arduino._timeout = tiempo
 		self.arduino._reconfigure_port()
+
+def mapA(x, in_min, in_max, out_min, out_max):
+	return (int(x) - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+def mapAround(x, in_min, in_max, out_min, out_max):
+	return round((int(x) - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
+
 
 
 #arduino = arduinoCentral("","")
