@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import sys,json,apiai,os,time,serial
-import RPi.GPIO as GPIO
 
 sys.path.insert(1,"tts/")
 import tts
@@ -54,7 +53,7 @@ class dialogflow:
 	def controlarVolumen(self,tipo,parametros,voz=True):
 		if self.silencioAbsolutov:
 			self.silencioAbsolutov = False
-			GPIO.output(17, True)
+			self.ventilador(True)
 			os.system("amixer sset Master {}%".format(self.volumen))
 
 		if tipo < 0:
@@ -84,9 +83,10 @@ class dialogflow:
 				self.volumen = int(parametros["valores"])
 		if voz: tts.tts("volumen al {}% señor".format(self.volumen))
 
-	def silencioAbsoluto():
+	def silencioAbsoluto(self,commando):
+		self.ventilador = commando
 		os.system("amixer sset Master 0%")
-		GPIO.output(17, False)
+		self.ventilador(False)
 		self.silencioAbsolutov = True
 
 
