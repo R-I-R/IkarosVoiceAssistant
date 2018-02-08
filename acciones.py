@@ -97,11 +97,13 @@ class arduinoCentral:
 
 	def __init__(self,puerto,vel):
 		self.arduino = serial.Serial(puerto, vel,timeout=0)
+		self.reinicio = False
 
 	def monitoreo(self):
 		envios = 0
 		contRespuestas = 0
 		while True:
+			if self.reinicio: continue
 			if self.envio:
 				time.sleep(0.15)
 				#if self.tiempo+2 > time.time():
@@ -165,9 +167,11 @@ class arduinoCentral:
 
 	def restart(self):
 		print("reiniciando...")
+		self.reinicio = True
 		self.arduino.close()
 		time.sleep(0.1)
 		self.arduino.open()
+		self.reinicio = False
 
 def mapA(x, in_min, in_max, out_min, out_max):
 	return (int(x) - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
