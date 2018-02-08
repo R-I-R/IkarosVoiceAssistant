@@ -65,24 +65,30 @@ class arduinoCentral:
 				if msg != '':
 					tts.tts(msg)
 					contRespuestas += 1
+					if contRespuestas == 1:
+						self._timeout = 60
+						envios = 0
 					if contRespuestas >= self.respuestas:
 						self.envio = 0
 						contRespuestas = 0
 						self._timeout = 0.1
 						self.respuestas = 0
+						continue
 				else:
 					envios += 1
 					self.enviarmsg(self.ultimaOrden)
+
+				if envios >= 4:
+					tts.tts("No se ha podido comunicar con el módulo")
+					envios = 0
+					self.envio = 0
 
 			else:
 				msg = self.arduino.readline().decode()[:-2]
 				if msg != '':
 					print(msg)
 
-			if envios >= 3:
-				tts.tts("No se ha podido comunicar con el módulo")
-				envios = 0
-				self.envio = 0
+			
 
 	def enviarmsg(self,msg):
 		self.envio = 1
