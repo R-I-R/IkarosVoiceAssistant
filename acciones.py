@@ -60,6 +60,7 @@ class arduinoCentral:
 		contRespuestas = 0
 		while True:
 			if self.envio:
+				time.sleep(0.1)
 				#if self.tiempo+2 > time.time():
 				msg = self.arduino.readline().decode()[:-2]
 				if msg != '':
@@ -92,7 +93,6 @@ class arduinoCentral:
 
 	def enviarmsg(self,msg):
 		self.envio = 1
-		time.sleep(0.2)
 		self._timeout = 2.5
 		self.arduino.write(msg.encode())
 		self.ultimaOrden = msg
