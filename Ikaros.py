@@ -86,7 +86,7 @@ def revivirReconocimientoVoz():
 	global hiloReconocimientoVoz,pararReconocimientoVoz
 	pararReconocimientoVoz.clear()
 	hiloReconocimientoVoz = threading.Thread(target=iniciarReconocimientoVoz,args=(pararReconocimientoVoz,),daemon=True)
-	hiloReconocimientoVoz.start
+	hiloReconocimientoVoz.start()
 
 
 pararReconocimientoVoz = threading.Event()

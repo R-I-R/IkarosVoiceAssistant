@@ -60,13 +60,14 @@ class arduinoCentral:
 		contRespuestas = 0
 		while True:
 			if self.envio:
-				time.sleep(0.1)
+				time.sleep(0.15)
 				#if self.tiempo+2 > time.time():
 				msg = self.arduino.readline().decode()[:-2]
 				if msg != '':
 					tts.tts(msg)
 					contRespuestas += 1
 					if contRespuestas == 1:
+						print("se establecio comunicacion")
 						self._timeout = 60
 						envios = 0
 					if contRespuestas >= self.respuestas:
