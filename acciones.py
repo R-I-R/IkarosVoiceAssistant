@@ -53,7 +53,7 @@ class dialogflow:
 	def controlarVolumen(self,tipo,parametros,voz=True):
 		if self.silencioAbsolutov:
 			self.silencioAbsolutov = False
-			self.gpio(self.pinventilador,True)
+			self.ventilador(True)
 			os.system("amixer sset Master {}%".format(self.volumen))
 
 		if tipo < 0:
@@ -83,11 +83,10 @@ class dialogflow:
 				self.volumen = int(parametros["valores"])
 		if voz: tts.tts("volumen al {}% señor".format(self.volumen))
 
-	def silencioAbsoluto(commando,valor):
-		self.gpio = commando
-		self.pinventilador = valor
+	def silencioAbsoluto(commando):
+		self.ventilador = commando
 		os.system("amixer sset Master 0%")
-		self.gpio(self.pinventilador,False)
+		self.ventilador(False)
 		self.silencioAbsolutov = True
 
 

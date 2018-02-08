@@ -42,7 +42,7 @@ def reconocervoz(repetir=True):
 		print("Google Speech Recognition thinks you said: "+texto)
 		if texto == "Buenos días":buenosDias()
 		elif texto == "buenas noches":buenasNoches()
-		elif texto == "silencio absoluto":IkarosApiAI.silencioAbsoluto(GPIO.output,17)
+		elif texto == "silencio absoluto": IkarosApiAI.silencioAbsoluto(ventilador)
 		else: IkarosApiAI.query(texto)
 	except sr.UnknownValueError:
 	    tts.tts("Lo siento, no entendí.")
@@ -50,11 +50,13 @@ def reconocervoz(repetir=True):
 	except sr.RequestError as e:
 	    tts.tts("no hay respuesta de Google")
 
+def ventilador(estado):
+	GPIO.output(17, estado)
 
 def buenosDias():
 	global hiloTemporal
 	dia = True
-	GPIO.output(17, True)
+	ventilador(True)
 	IkarosApiAI.controlarVolumen(0,{"number":'60',"valores":''},voz=False)
 	tts.tts("buenos díasseñor")
 	IkarosApiAI.query("prende la luz y abre la cortina")
@@ -64,11 +66,11 @@ def buenosDias():
 def buenasNoches():
 	global hiloTemporal
 	dia = False
-	GPIO.output(17, False)
+	ventilador(False)
 	IkarosApiAI.controlarVolumen(0,{"number":'30',"valores":''},voz=False)
 	tts.tts("buenas noches señor")
 	IkarosApiAI.query("apaga la luz y cierra la cortina")
-	hiloTemporal = threading.Timer(7200, GPIO.output,args=(17,True))
+	hiloTemporal = threading.Timer(7200, ventilador,args=(True,))
 	hiloTemporal.start()
 
 Arduino = arduinoCentral("/dev/ttyACM0",9600)
