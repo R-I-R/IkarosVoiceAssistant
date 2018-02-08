@@ -108,6 +108,7 @@ root = Tk()
 Button(root,text="parar reconocimiento de voz",command=pararReconocimientoVoz.set).pack()
 BrevivirReconocimientoVoz = Button(root,text="iniciar reconocimiento de voz",command=revivirReconocimientoVoz,state="disabled")
 BrevivirReconocimientoVoz.pack()
+Button(root,text="Reiniciar comunicacion Serial",command=Arduino.restart).pack()
 root.mainloop()
 
 #GPIO.cleanup()
