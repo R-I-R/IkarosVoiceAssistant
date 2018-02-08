@@ -67,10 +67,10 @@ class arduinoCentral:
 					tts.tts(msg)
 					contRespuestas += 1
 					if contRespuestas == 1:
-						self.timeout(60)
+						self.arduino.timeout(60)
 						envios = 0
 					if contRespuestas >= self.respuestas:
-						self.timeout(0.1)
+						self.arduino.timeout(0.1)
 						self.envio = 0
 						contRespuestas = 0
 						self.respuestas = 0
@@ -81,7 +81,7 @@ class arduinoCentral:
 
 				if envios >= 4:
 					tts.tts("No se ha podido comunicar con el módulo")
-					self.timeout(0.1)
+					self.arduino.timeout(0.1)
 					envios = 0
 					self.envio = 0
 
@@ -94,7 +94,7 @@ class arduinoCentral:
 
 	def enviarmsg(self,msg):
 		self.envio = 1
-		self.timeout(2.5)
+		self.arduino.timeout(2.5)
 		self.arduino.write(msg.encode())
 		self.ultimaOrden = msg
 		#self.tiempo = time.time()
