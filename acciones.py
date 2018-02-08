@@ -54,7 +54,7 @@ class dialogflow:
 		if self.silencioAbsolutov:
 			self.silencioAbsolutov = False
 			self.ventilador(True)
-			os.system("amixer sset Master {}%".format(self.volumen))
+			os.system("amixer sset Master {}%".format(mapAround(self.volumen,0,100,34,100)))
 
 		if tipo < 0:
 			if parametros["number"] != '':

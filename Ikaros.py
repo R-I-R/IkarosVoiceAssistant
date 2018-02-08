@@ -19,6 +19,7 @@ interrupted = False
 dia = True
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.OUT)
+GPIO.output(17, estado)
 
 def signal_handler(signal, frame):
     global interrupted
