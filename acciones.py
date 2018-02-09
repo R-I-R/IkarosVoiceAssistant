@@ -102,6 +102,7 @@ class arduinoCentral:
 	def monitoreo(self):
 		envios = 0
 		contRespuestas = 0
+		reinicio = False
 		while True:
 			if self.SerialStop: continue
 			if self.envio:
@@ -110,6 +111,10 @@ class arduinoCentral:
 				msg = self.arduino.readline().decode()[:-2]
 				if msg != '':
 					tts.tts(msg)
+					if reinicio:
+						self.enviarmsg(self.ultimaOrden)
+						reinicio = False
+						continue
 					contRespuestas += 1
 					if contRespuestas == 1:
 						self.setTimeout(60)
@@ -128,10 +133,10 @@ class arduinoCentral:
 					tts.tts("No se ha podido comunicar con el módulo")
 					self.setTimeout(0)
 					envios = 0
-					self.envio = 0
 					tts.tts("reiniciando")
 					self.restart()
-					self.enviarmsg(self.ultimaOrden)
+					reinicio = True
+					
 
 			else:
 				msg = self.arduino.readline().decode()[:-2]
