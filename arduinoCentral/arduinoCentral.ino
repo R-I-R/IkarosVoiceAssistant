@@ -81,6 +81,7 @@ void loop() {
         temps += CortinasPiezaDato.pos + "%";
         Serial.println(temps);
       }
+      avisocortinas = false;
     }
   }
   

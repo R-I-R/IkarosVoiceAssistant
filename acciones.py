@@ -97,13 +97,13 @@ class arduinoCentral:
 
 	def __init__(self,puerto,vel):
 		self.arduino = serial.Serial(puerto, vel,timeout=0)
-		self.reinicio = False
+		self.SerialStop = False
 
 	def monitoreo(self):
 		envios = 0
 		contRespuestas = 0
 		while True:
-			if self.reinicio: continue
+			if self.SerialStop: continue
 			if self.envio:
 				time.sleep(0.15)
 				#if self.tiempo+2 > time.time():
@@ -124,13 +124,14 @@ class arduinoCentral:
 					envios += 1
 					self.enviarmsg(self.ultimaOrden)
 
-				if envios >= 4:
+				if envios >= 3:
 					tts.tts("No se ha podido comunicar con el módulo")
 					self.setTimeout(0)
 					envios = 0
 					self.envio = 0
+					tts.tts("reiniciando")
 					self.restart()
-					print("serial reiniciado")
+					self.enviarmsg(self.ultimaOrden)
 
 			else:
 				msg = self.arduino.readline().decode()[:-2]
@@ -167,11 +168,17 @@ class arduinoCentral:
 
 	def restart(self):
 		print("reiniciando...")
-		self.reinicio = True
-		self.arduino.close()
+		self.close()
 		time.sleep(0.1)
+		self.open()
+
+	def close(self):
+		self.SerialStop = True
+		self.arduino.close()
+
+	def open(self):
 		self.arduino.open()
-		self.reinicio = False
+		self.SerialStop = False
 
 def mapA(x, in_min, in_max, out_min, out_max):
 	return (int(x) - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
