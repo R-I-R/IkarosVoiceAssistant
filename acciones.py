@@ -171,6 +171,7 @@ class arduinoCentral:
 		self.close()
 		time.sleep(0.1)
 		self.open()
+		time.sleep(0.2)
 
 	def close(self):
 		self.SerialStop = True
