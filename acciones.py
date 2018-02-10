@@ -97,7 +97,7 @@ class arduinoCentral:
 	respuestas = 0
 
 	def __init__(self,puerto,vel):
-		self.arduino = serial.Serial(puerto, vel,timeout=0)
+		self.arduino = serial.Serial(puerto, vel,timeout=0.01)
 		self.SerialStop = False
 
 	def monitoreo(self):
@@ -121,7 +121,7 @@ class arduinoCentral:
 						self.setTimeout(60)
 						envios = 0
 					if contRespuestas >= self.respuestas:
-						self.setTimeout(0)
+						self.setTimeout(0.01)
 						self.envio = 0
 						contRespuestas = 0
 						self.respuestas = 0
@@ -132,7 +132,7 @@ class arduinoCentral:
 
 				if envios >= 3:
 					tts.tts("No se ha podido comunicar con el módulo")
-					self.setTimeout(0)
+					self.setTimeout(0.01)
 					envios = 0
 					tts.tts("reiniciando")
 					self.restart()
