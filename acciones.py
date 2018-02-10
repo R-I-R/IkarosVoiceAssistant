@@ -38,6 +38,7 @@ class dialogflow:
 			
 		self.request = self.ai.text_request()
 
+
 	def usar_modulos(self,parametros):
 		if parametros["modulos"] == "luz":
 			self.arduino.luces(parametros["estados"])
@@ -193,11 +194,95 @@ def mapAround(x, in_min, in_max, out_min, out_max):
 
 
 
-#arduino = arduinoCentral("","")
-#print("creando dialogflow")
-#IkarosApiAI = dialogflow('9d6dd218d16b457499b933d09b834d5d',arduino)
-#print("enviando query")
-#IkarosApiAI.query("abre las cortinas y prende las luces")
-#time.sleep(5)
-#print("enviando query2")
-#IkarosApiAI.query("desactiva las luces y abre las cortinas al 95%")
+
+class dialogflowTester:
+	from tkinter import Tk,Button,Entry,Frame,StringVar,Label
+	import speech_recognition as sr
+
+	def __init__(self,ClientId):
+		self.ai = apiai.ApiAI(ClientId)
+		self.request = self.ai.text_request()
+
+
+	def queryTest(self,texto):
+		self.request.query = texto
+		response = self.request.getresponse()
+
+		if os.name == "posix":
+			query = json.loads(response.read().decode())["result"]
+		else:
+			query = json.loads(response.read())["result"]
+
+		if self.grafico:
+			self.parametros.set(query["parameters"])
+			self.intencion.set(query["metadata"]["intentName"])
+			self.dialogo.set(query["fulfillment"]["speech"])
+		else:
+			print()
+			print("parametros:",query["parameters"])
+			print("intencion:",query["metadata"]["intentName"])
+			print("dialogo:",query["fulfillment"]["speech"])
+
+		self.request = self.ai.text_request()
+
+	
+	def reconocer(self):
+		r = self.sr.Recognizer()
+		with self.sr.Microphone() as source:
+			r.adjust_for_ambient_noise(source)
+			if self.grafico:
+				self.aviso.set("\t\t\tRecording\t\t\t")
+				self.avisos.update_idletasks()
+			else: print("Say something!")
+			audio = r.listen(source)
+
+		if self.grafico:
+			self.aviso.set("\t\t\tFinish\t\t\t")
+			self.avisos.update_idletasks()
+		else: print("listo")
+		
+		try:
+			texto = r.recognize_google(audio,language="es-CL")
+			if self.grafico: self.aviso.set("your say: "+texto)
+			else: print("dijiste: " + texto)
+			self.queryTest(texto)
+		except self.sr.UnknownValueError:
+			if self.grafico: self.aviso.set("Google Speech Recognition could not understand audio")
+			else:print("Google Speech Recognition could not understand audio")
+		except self.sr.RequestError as e:
+			if self.grafico: self.aviso.set("Could not request results from Google Speech Recognition service; {0}".format(e))
+			else:print("Could not request results from Google Speech Recognition service; {0}".format(e))
+
+	def graficos(self):
+		self.grafico = True
+		root = self.Tk()
+		root.title("dialogflowTester")
+		self.aviso = self.StringVar()
+		texto = self.StringVar()
+		self.parametros = self.StringVar()
+		self.intencion = self.StringVar()
+		self.dialogo = self.StringVar()
+		self.avisos = self.Label(root,textvar=self.aviso,fg="red")
+		self.avisos.pack()
+		self.Entry(root,textvar=texto,width=100).pack()
+		frame = self.Frame(root)
+		frame1 = self.Frame(root)
+		frame2 = self.Frame(root)
+		frame3 = self.Frame(root)
+		self.Button(frame,text="Enviar Texto",command= lambda: [self.queryTest(texto.get()),texto.set("")]).pack(side="left")
+		self.Button(frame,text="Enviar voz",command=self.reconocer).pack(side="right")
+		self.Label(frame1,text="parametros:").pack(side="left")
+		self.Label(frame1,textvar=self.parametros).pack(side="right")
+		self.Label(frame2,text="intencion:").pack(side="left")
+		self.Label(frame2,textvar=self.intencion).pack(side="right")
+		self.Label(frame3,text="dialogo:").pack(side="left")
+		self.Label(frame3,textvar=self.dialogo).pack(side="right")
+		frame.pack()
+		frame1.pack()
+		frame2.pack()
+		frame3.pack()
+		root.mainloop()
+
+
+
+#dialogflowTester('9d6dd218d16b457499b933d09b834d5d').graficos()
