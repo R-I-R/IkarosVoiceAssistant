@@ -65,7 +65,7 @@ class dialogflow:
 			else:
 				os.system("amixer sset Master 7%-")
 				self.volumen -= 10
-		if tipo > 0:
+		elif tipo > 0:
 			if parametros["number"] != '':
 				number = mapAround(parametros["number"],0,100,34,100)
 				os.system("amixer sset Master {}%+".format(number))
@@ -206,6 +206,7 @@ class dialogflowTester:
 
 	def queryTest(self,texto):
 		self.request.query = texto
+		#self.request.timezone = "America/Santiago"
 		response = self.request.getresponse()
 
 		if os.name == "posix":
