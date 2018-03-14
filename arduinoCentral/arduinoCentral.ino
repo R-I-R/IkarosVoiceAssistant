@@ -69,7 +69,8 @@ void loop() {
       else if(CortinasPiezaDato.pos == 0) Serial.println("Cerrando cortinas");
       else{
         String temps = "Moviendo cortinas al ";
-        temps += CortinasPiezaDato.pos + "%";
+        temps += CortinasPiezaDato.pos;
+        temps += "%";
         Serial.println(temps);
       }
       avisocortinas = true;
@@ -78,7 +79,8 @@ void loop() {
       else if(CortinasPiezaDato.pos == 0) Serial.println("Cortinas Cerradas");
       else{
         String temps = "cortinas al ";
-        temps += CortinasPiezaDato.pos + "%";
+        temps += CortinasPiezaDato.pos;
+        temps += "%";
         Serial.println(temps);
       }
       avisocortinas = false;
