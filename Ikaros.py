@@ -31,12 +31,14 @@ def interrupt_callback():
     return interrupted
 
 def reconocervoz(repetir=True):
+	tts.tts("Lo escucho",IkarosApiAI.volumen)
+	#time.sleep(1)
+
 	r = sr.Recognizer()
 	m = sr.Microphone()
+
 	with m as source:
-	    tts.tts("Lo escucho")
 	    r.adjust_for_ambient_noise(source)
-	    #time.sleep(1)
 	    audio = r.listen(source)
 	try:
 		texto = r.recognize_google(audio,language="es-CL")
@@ -46,10 +48,10 @@ def reconocervoz(repetir=True):
 		elif texto == "silencio absoluto": IkarosApiAI.silencioAbsoluto(ventilador)
 		else: IkarosApiAI.query(texto)
 	except sr.UnknownValueError:
-	    tts.tts("Lo siento, no entendí.")
+	    tts.tts("Lo siento, no entendí.",IkarosApiAI.volumen)
 	    if repetir: reconocervoz(False)
 	except sr.RequestError as e:
-	    tts.tts("no hay respuesta de Google")
+	    tts.tts("no hay respuesta de Google",IkarosApiAI.volumen)
 
 def ventilador(estado):
 	GPIO.output(17, estado)
@@ -59,7 +61,7 @@ def buenosDias():
 	dia = True
 	ventilador(True)
 	IkarosApiAI.controlarVolumen(0,{"number":'60',"valores":''},voz=False)
-	tts.tts("buenos díasseñor")
+	tts.tts("buenos díasseñor",IkarosApiAI.volumen)
 	IkarosApiAI.query("prende la luz y abre la cortina")
 	try: hiloTemporal.cancel()
 	except: pass
@@ -69,7 +71,7 @@ def buenasNoches():
 	dia = False
 	ventilador(False)
 	IkarosApiAI.controlarVolumen(0,{"number":'30',"valores":''},voz=False)
-	tts.tts("buenas noches señor")
+	tts.tts("buenas noches señor",IkarosApiAI.volumen)
 	IkarosApiAI.query("apaga la luz y cierra la cortina")
 	hiloTemporal = threading.Timer(7200, ventilador,args=(True,))
 	hiloTemporal.start()

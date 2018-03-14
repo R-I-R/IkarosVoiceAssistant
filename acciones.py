@@ -29,7 +29,7 @@ class dialogflow:
 
 		if query["fulfillment"]["speech"] != "":
 			#print(query["fulfillment"]["speech"])
-			tts.tts(query["fulfillment"]["speech"])
+			tts.tts(query["fulfillment"]["speech"],self.volumen)
 
 		if intencion == "usar_modulos": self.usar_modulos(query["parameters"])
 		elif intencion == "volumen": self.controlarVolumen(0,query["parameters"])
@@ -55,34 +55,31 @@ class dialogflow:
 		if self.silencioAbsolutov:
 			self.silencioAbsolutov = False
 			self.ventilador(True)
-			os.system("amixer sset Master {}%".format(mapAround(self.volumen,0,100,34,100)))
+			os.system("amixer sset Master {}%".format(self.volumen))
 
 		if tipo < 0:
 			if parametros["number"] != '':
-				number = mapAround(parametros["number"],0,100,34,100)
-				os.system("amixer sset Master {}%-".format(number))
+				os.system("amixer sset Master {}%-".format(int(parametros["number"])))
 				self.volumen -= int(parametros["number"])
 			else:
-				os.system("amixer sset Master 7%-")
+				os.system("amixer sset Master 10%-")
 				self.volumen -= 10
 		elif tipo > 0:
 			if parametros["number"] != '':
-				number = mapAround(parametros["number"],0,100,34,100)
-				os.system("amixer sset Master {}%+".format(number))
+				os.system("amixer sset Master {}%+".format(int(parametros["number"])))
 				self.volumen += int(parametros["number"])
 			else:
-				os.system("amixer sset Master 7%+")
+				os.system("amixer sset Master 10%+")
 				self.volumen += 10
 		else:
 			if parametros["number"] != '':
-				number = mapAround(parametros["number"],0,100,34,100)
-				os.system("amixer sset Master {}%".format(number))
+				os.system("amixer sset Master {}%".format(int(parametros["number"])))
 				self.volumen = int(parametros["number"])
 			elif parametros["valores"] != '':
-				valores = mapAround(parametros["valores"],0,100,34,100)
-				os.system("amixer sset Master {}%-".format(valores))
+				os.system("amixer sset Master {}%-".format(int(parametros["valores"])))
 				self.volumen = int(parametros["valores"])
-		if voz: tts.tts("volumen al {}% señor".format(self.volumen))
+		if voz: tts.tts("volumen al {}% señor".format(self.volumen),self.volumen)
+		self.arduino.setVolumen(self.volumen)
 
 	def silencioAbsoluto(self,commando):
 		self.ventilador = commando
@@ -111,7 +108,7 @@ class arduinoCentral:
 				#if self.tiempo+2 > time.time():
 				msg = self.arduino.readline().decode()[:-2]
 				if msg != '':
-					tts.tts(msg)
+					tts.tts(msg,self.volumen)
 					if reinicio:
 						self.enviarmsg(self.ultimaOrden)
 						reinicio = False
@@ -131,10 +128,10 @@ class arduinoCentral:
 					self.enviarmsg(self.ultimaOrden)
 
 				if envios >= 3:
-					tts.tts("No se ha podido comunicar con el módulo")
+					tts.tts("No se ha podido comunicar con el módulo",self.volumen)
 					self.setTimeout(0.01)
 					envios = 0
-					tts.tts("reiniciando")
+					tts.tts("reiniciando",self.volumen)
 					self.restart()
 					reinicio = True
 					
@@ -186,6 +183,9 @@ class arduinoCentral:
 	def open(self):
 		self.arduino.open()
 		self.SerialStop = False
+
+	def setVolumen(self,vol):
+		self.volumen = vol
 
 def mapA(x, in_min, in_max, out_min, out_max):
 	return (int(x) - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
