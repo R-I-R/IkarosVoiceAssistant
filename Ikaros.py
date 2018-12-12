@@ -10,9 +10,9 @@ import threading
 from acciones import *
 from tkinter import *
 
-sys.path.insert(1,"snowboy/")
+sys.path.insert(1,"./snowboy/")
 import snowboydecoderIkaros as snowboydecoder
-sys.path.insert(1,"tts/")
+sys.path.insert(1,"./tts/")
 import tts
 
 interrupted = False

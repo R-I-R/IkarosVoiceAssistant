@@ -47,7 +47,7 @@ def tts(nombre,vol=0):
 
 def reproducir(file,vol=0):
 	if equipo == "posix":
-		import math
+		#import math
 		os.system("aplay "+file)
 		#os.system("omxplayer -o local --vol {} ".format(int(2000*(math.log10(vol/100))))+file)
 	else:
