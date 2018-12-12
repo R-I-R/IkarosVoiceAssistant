@@ -29,6 +29,7 @@ def tts(nombre,vol=0):
 	else : archivo = "audios/"+archivo+".wav"
 	if isfile(archivo):
 		reproducir(archivo,vol)
+		print(nombre)
 	else:
 
 		from watson_developer_cloud import TextToSpeechV1
@@ -42,12 +43,13 @@ def tts(nombre,vol=0):
 			audio_file.write(text_to_speech.synthesize(nombre, accept='audio/wav',voice="es-ES_EnriqueVoice"))
 			audio_file.close()
 		reproducir(archivo,vol)
+		print(nombre)
 
 def reproducir(file,vol=0):
 	if equipo == "posix":
 		import math
-		#os.system("aplay "+file)
-		os.system("omxplayer -o local --vol {} ".format(int(2000*(math.log10(vol/100))))+file)
+		os.system("aplay "+file)
+		#os.system("omxplayer -o local --vol {} ".format(int(2000*(math.log10(vol/100))))+file)
 	else:
 		if isfile((os.getcwd()+"\\"+file).replace("/","\\")):
 			os.system("start wmplayer "+(os.getcwd()+"\\"+file).replace("/","\\"))

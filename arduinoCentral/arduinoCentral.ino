@@ -28,7 +28,7 @@ struct SLuzPieza{
 struct SCortinasPieza{
   int ID = 12;
   byte pos;
-  unsigned long limites[2] = {cerrarcortina,abrircortina};
+  unsigned long pasos[2] = {cerrarcortina,abrircortina};
   byte parar = pararcortina;
   byte vel[2] = {velcerrarcortina,velabrircortina};
 }CortinasPiezaDato;
@@ -45,7 +45,7 @@ void setup() {
   pinMode(10,OUTPUT);
   Serial.begin(9600);
   Serial.setTimeout(50);
-  if(radio.init(10,5,6))Serial.println("Radio Online");//Radio ID, CE pin, CSN pin
+  if(radio.init(12,8,10))Serial.println("Radio Online");//Radio ID, CE pin, CSN pin
   else Serial.println("Error al conectar con el Radio");
 }
 
