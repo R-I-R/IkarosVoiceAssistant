@@ -36,8 +36,7 @@ def tts(nombre,vol=0):
 
 		text_to_speech = TextToSpeechV1(
     		username='464a4abf-53b5-4ff7-a578-1330e295512a',
-    		password='UygljpTJFaIb',
-    		x_watson_learning_opt_out=True)  # Optional flag
+    		password='UygljpTJFaIb')
 
 		with open(join(dirname(__file__), archivo),'wb') as audio_file:
 			audio_file.write(text_to_speech.synthesize(nombre, accept='audio/wav',voice="es-ES_EnriqueVoice"))
