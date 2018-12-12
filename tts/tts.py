@@ -39,7 +39,7 @@ def tts(nombre,vol=0):
     		password='UygljpTJFaIb')
 
 		with open(join(dirname(__file__), archivo),'wb') as audio_file:
-			audio_file.write(text_to_speech.synthesize(nombre, accept='audio/wav',voice="es-ES_EnriqueVoice"))
+			audio_file.write(text_to_speech.synthesize(nombre, accept='audio/wav',voice="es-ES_EnriqueVoice").get_result().content)
 			audio_file.close()
 		reproducir(archivo,vol)
 		print(nombre)
@@ -54,3 +54,7 @@ def reproducir(file,vol=0):
 			os.system("start wmplayer "+(os.getcwd()+"\\"+file).replace("/","\\"))
 		else: os.system("start wmplayer "+(os.getcwd()+"\\tts\\"+file).replace("/","\\"))
 
+
+if __name__ == "__main__":
+	
+	tts("hola")
