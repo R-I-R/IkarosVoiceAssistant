@@ -9,7 +9,7 @@
 #define CortinasPieza 12
 
 //defines
-#define enviar(ID,dato) if(radio.send(ID,&dato, sizeof(dato))) Serial.println("Error de Transmicion")
+#define enviar(ID,dato) if(radio.send(ID,&dato, sizeof(dato))) Serial.println("Error de Transmision")
 #define cerrarcortina 5000   //4700
 #define abrircortina 5200   //5200
 #define pararcortina 85
