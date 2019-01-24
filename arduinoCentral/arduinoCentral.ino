@@ -45,7 +45,7 @@ void setup() {
   pinMode(10,OUTPUT);
   Serial.begin(9600);
   Serial.setTimeout(50);
-  if(radio.init(12,8,10))Serial.println("Radio Online");//Radio ID, CE pin, CSN pin
+  if(radio.init(Central,5,6))Serial.println("Radio Online");//Radio ID, CE pin, CSN pin
   else Serial.println("Error al conectar con el Radio");
 }
 
