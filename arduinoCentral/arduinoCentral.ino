@@ -90,7 +90,7 @@ void loop() {
 
   
   if(Serial.available()){
-    String serial = Serial.readString();
+    String serial = Serial.readStringUntil('\n');
     if(serial.equals("luz pieza on")){
       SLuzPiezaDato.estado = 1;
       enviar(LuzPieza,SLuzPiezaDato);
