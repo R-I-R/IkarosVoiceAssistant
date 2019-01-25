@@ -151,12 +151,11 @@ class arduinoCentral:
 		#self.tiempo = time.time()
 
 	def cortinas(self,estado,number,place="pieza"):
-		"""self.respuestas += 2
+		self.respuestas += 2
 		if number != '':
 			self.enviarmsg("cortina {} {}".format(place,number))
 		else:
-			self.enviarmsg("cortina {} {}".format(place,estado))"""
-		pass
+			self.enviarmsg("cortina {} {}".format(place,estado))
 
 	def luces(self,estado,place="pieza"):
 		self.respuestas += 1
