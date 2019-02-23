@@ -185,8 +185,9 @@ class arduinoCentral:
 		self.close()
 		time.sleep(0.1)
 		GPIO.output(17, True)
+		time.sleep(.01)
 		GPIO.output(17, False)
-		time.sleep(2)
+		time.sleep(5)
 		self.open()
 		time.sleep(0.2)
 
