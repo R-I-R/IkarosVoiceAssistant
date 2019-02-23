@@ -313,6 +313,7 @@ class bateria:
 		#Thread(target=self.graficos,daemon=True).start()
 		while True:
 			data = self.bus.read_i2c_block_data(self.direccion,37,2)
+			print(data)
 			voltaje = data[0]*100+data[1]
 			self.voltaje.set("V: {}".format(voltaje/100))
 			#self.barra.step(mapA(voltaje,300,410,0,100))
