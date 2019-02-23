@@ -126,7 +126,7 @@ tk.Button(controlF,text="Iniciar comunicacion Serial",command=Arduino.open).pack
 controlF.pack(side="left")
 
 ttk.Progressbar(bateriaF,variable=Bateria.porcentaje,length=200).pack()
-tk.Label(bateriaF,texvar=Bateria.voltaje).pack()
+tk.Label(bateriaF,textvar=Bateria.voltaje).pack()
 bateriaF.pack(side="left")
 
 root.mainloop()
