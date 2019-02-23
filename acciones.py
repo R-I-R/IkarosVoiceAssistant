@@ -184,10 +184,10 @@ class arduinoCentral:
 		print("reiniciando...")
 		self.close()
 		time.sleep(0.1)
-		GPIO.output(17, True)
-		time.sleep(.01)
-		GPIO.output(17, False)
-		time.sleep(5)
+		GPIO.output(27, True)
+		#time.sleep(.01)
+		GPIO.output(27, False)
+		time.sleep(8)
 		self.open()
 		time.sleep(0.2)
 
@@ -314,7 +314,7 @@ class bateria:
 		#Thread(target=self.graficos,daemon=True).start()
 		while True:
 			data = self.bus.read_i2c_block_data(self.direccion,37,2)
-			print(data)
+			#print(data)
 			voltaje = data[0]*100+data[1]
 			self.voltaje.set("V: {}".format(voltaje/100))
 			#self.barra.step(mapA(voltaje,300,410,0,100))
