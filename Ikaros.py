@@ -101,10 +101,6 @@ def revivirReconocimientoVoz():
 	hiloReconocimientoVoz.start()
 	BrevivirReconocimientoVoz.config(state="disabled")
 
-def reiniciarArduino():
-	Arduino.restart()
-	Bateria.restart()
-
 
 #declaracion de hilos
 pararReconocimientoVoz = threading.Event()
@@ -127,7 +123,7 @@ Bateria.porcentaje = tk.IntVar()
 tk.Button(controlF,text="Parar reconocimiento de voz",command=pararReconocimientoVoz.set).pack()
 BrevivirReconocimientoVoz = tk.Button(controlF,text="Iniciar reconocimiento de voz",command=revivirReconocimientoVoz,state="disabled")
 BrevivirReconocimientoVoz.pack()
-tk.Button(controlF,text="Reiniciar comunicacion Serial",command=reiniciarArduino).pack()
+tk.Button(controlF,text="Reiniciar comunicacion Serial",command=Arduino.restart).pack()
 tk.Button(controlF,text="Parar comunicacion Serial",command=Arduino.close).pack()
 tk.Button(controlF,text="Iniciar comunicacion Serial",command=Arduino.open).pack()
 controlF.pack(side="left")

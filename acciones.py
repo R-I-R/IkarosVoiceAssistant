@@ -180,14 +180,14 @@ class arduinoCentral:
 		time.sleep(0.1)
 
 	def restart(self):
-		import RPi.GPIO as GPIO
+		#import RPi.GPIO as GPIO
 		print("reiniciando...")
 		self.close()
 		time.sleep(0.1)
-		GPIO.output(27, True)
+		#GPIO.output(27, True)
 		#time.sleep(.01)
-		GPIO.output(27, False)
-		time.sleep(10)
+		#GPIO.output(27, False)
+		#time.sleep(10)
 		self.open()
 		time.sleep(0.2)
 
