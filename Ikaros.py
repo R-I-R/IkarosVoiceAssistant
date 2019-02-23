@@ -80,6 +80,7 @@ def buenasNoches():
 	hiloTemporal.start()
 
 Arduino = arduinoCentral("/dev/ttyACM0",9600)
+Bateria = bateria()
 IkarosApiAI = dialogflow('9d6dd218d16b457499b933d09b834d5d',Arduino)
 
 
@@ -105,9 +106,11 @@ pararReconocimientoVoz = threading.Event()
 hiloTemporal = None
 hiloReconocimientoVoz = threading.Thread(target=iniciarReconocimientoVoz,args=(pararReconocimientoVoz,),daemon=True)
 hiloMonitoreoArduino = threading.Thread(target=Arduino.monitoreo,daemon=True)
+hiloMonitoreoBateria = threading.Thread(target=Bateria.monitoreo,daemon=True)
 
 hiloReconocimientoVoz.start()
 hiloMonitoreoArduino.start()
+hiloMonitoreoBateria.start()
 
 root = Tk()
 Button(root,text="Parar reconocimiento de voz",command=pararReconocimientoVoz.set).pack()
