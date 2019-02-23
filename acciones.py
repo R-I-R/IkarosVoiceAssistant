@@ -187,7 +187,7 @@ class arduinoCentral:
 		GPIO.output(27, True)
 		#time.sleep(.01)
 		GPIO.output(27, False)
-		time.sleep(8)
+		time.sleep(10)
 		self.open()
 		time.sleep(0.2)
 
@@ -308,11 +308,14 @@ class bateria:
 		self.direccion = 10
 		self.voltaje = None
 		self.porcentaje = None
+		self.pausa = False
 
 	def monitoreo(self):
 		#from threading import Thread
 		#Thread(target=self.graficos,daemon=True).start()
 		while True:
+			if self.pausa: continue
+
 			data = self.bus.read_i2c_block_data(self.direccion,37,2)
 			#print(data)
 			voltaje = data[0]*100+data[1]
@@ -320,6 +323,12 @@ class bateria:
 			#self.barra.step(mapA(voltaje,300,410,0,100))
 			self.porcentaje.set(mapA(voltaje,300,410,0,100))
 			time.sleep(1)
+
+	def restart(self):
+		self.pausa = True
+		time.sleep(10)
+		self.pausa = False
+	
 
 
 
