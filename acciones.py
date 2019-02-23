@@ -310,9 +310,9 @@ class bateria:
 		Thread(target=self.graficos,daemon=True).start()
 		while True:
 			data = self.bus.read_i2c_block_data(self.direccion,37,2)
-			voltaje = data[0]*100+data[1]
-			self.voltaje.set("V: {}".format(voltaje/100))
-			self.porcentaje.set(mapA(voltaje,300,410,0,100))
+			vol = data[0]*100+data[1]
+			self.voltaje.set("V: {}".format(vol/100))
+			self.porcentaje.set(mapA(vol,300,410,0,100))
 			time.sleep(1)
 
 	def graficos(self):
