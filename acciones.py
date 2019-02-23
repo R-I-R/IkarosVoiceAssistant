@@ -12,6 +12,7 @@ import os
 import time
 import serial
 import tts
+import tkinter as tk
 
 #clases
 
@@ -300,13 +301,12 @@ class dialogflowTester:
 
 class bateria:
 	import smbus
-	import tkinter as tk
 	
 	def __init__(self):
 		self.bus = self.smbus.SMBus(1)
 		self.direccion = 10
-		self.porcentaje = self.tk.IntVar()
-		self.voltaje = self.tk.StringVar()
+		self.voltaje = tk.StringVar()
+		self.porcentaje = tk.IntVar()
 
 	def monitoreo(self):
 		from threading import Thread
@@ -315,18 +315,19 @@ class bateria:
 			data = self.bus.read_i2c_block_data(self.direccion,37,2)
 			voltaje = data[0]*100+data[1]
 			self.voltaje.set("V: {}".format(voltaje/100))
+			#self.barra.step(mapA(voltaje,300,410,0,100))
 			self.porcentaje.set(mapA(voltaje,300,410,0,100))
 			time.sleep(1)
 
 	def graficos(self):
 		from tkinter import ttk
 
-		root = self.tk.Tk()
+		root = tk.Tk()
 		root.title("Bateria")
 		root.resizable(False,False)
-		
-		ttk.Progressbar(root,variable=self.porcentaje,length=200).pack()
-		self.tk.Label(root,textvar=self.voltaje).pack()
+		self.barra = ttk.Progressbar(root,variable=self.porcentaje,length=200)
+		self.barra.pack()
+		tk.Label(root,textvar=self.voltaje).pack()
 		root.mainloop()
 
 
