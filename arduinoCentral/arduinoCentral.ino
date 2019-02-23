@@ -1,4 +1,5 @@
 //importar librerias
+#include<Wire.h>
 #include<SPI.h>
 #include<NRFLite.h>
 #include<EEPROM.h>
@@ -15,6 +16,11 @@
 #define pararcortina 85
 #define velabrircortina 180
 #define velcerrarcortina 10
+
+#define bateria A0
+#define rele 4
+#define CE_PIN 10
+#define CSN_PIN 9
 
 //creacion de objetos
 NRFLite radio;
@@ -37,20 +43,33 @@ struct SCortinasPieza{
 bool enviadoLuzPieza;
 byte packetSize;
 bool avisocortinas = false;
+int voltaje = 0;
 
 //creacion de funciones
 
 //inicio de codigo
 void setup() {
-  pinMode(10,OUTPUT);
+  pinMode(bateria,INPUT);
+  pinMode(rele,OUTPUT);
+
+  Wire.begin(Central);
+  Wire.onRequest(mandarCarga);
+  
   Serial.begin(9600);
+  while(!Serial) monitorearCarga();
   Serial.setTimeout(50);
-  if(radio.init(Central,5,6))Serial.println("Radio Online");//Radio ID, CE pin, CSN pin
+  
+  if(radio.init(Central,CE_PIN,CSN_PIN))Serial.println("Radio Online");//Radio ID, CE pin, CSN pin
   else Serial.println("Error al conectar con el Radio");
 }
 
 void loop() {
-  
+  monitorearCarga();
+  revisionRadio();
+  revisionSerial(); 
+}
+
+void revisionRadio(){
   packetSize = radio.hasData();
 
   if(packetSize == sizeof(SLuzPiezaDato)){
@@ -86,11 +105,13 @@ void loop() {
       avisocortinas = false;
     }
   }
-  
+}
 
-  
+void revisionSerial(){
   if(Serial.available()){
     String serial = Serial.readStringUntil('\n');
+    //Serial.print("----");
+    //Serial.println(serial);
     if(serial.equals("luz pieza on")){
       SLuzPiezaDato.estado = 1;
       enviar(LuzPieza,SLuzPiezaDato);
@@ -110,4 +131,24 @@ void loop() {
       radio.send(CortinasPieza,&CortinasPiezaDato,sizeof(CortinasPiezaDato));
     }
   }
- }
+}
+
+void monitorearCarga(){
+  int lectura = 0;
+  voltaje = 0;
+ 
+  for(int a = 0; a < 10; a++){
+    lectura = map(analogRead(bateria),0,1023,0,500);
+    lectura -= round(7.9*lectura/100.0);
+    voltaje += lectura;
+  }
+  voltaje /= 10;
+
+  if(voltaje < 410) digitalWrite(rele,HIGH);
+  else digitalWrite(rele,LOW);
+}
+
+void mandarCarga(){
+  byte data[] = {voltaje/100,voltaje%100};
+  Wire.write(data,2);
+}

@@ -1,10 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys,json,apiai,os,time,serial
-
+import sys
+#paths
 sys.path.insert(1,"tts/")
+
+#imports
+import json
+import apiai
+import os
+import time
+import serial
 import tts
+
+#clases
 
 class dialogflow:
 	def __init__(self,ClientId,arduino):
@@ -13,7 +22,7 @@ class dialogflow:
 		self.arduino = arduino
 		self.silencioAbsolutov = False
 		self.controlarVolumen(0,{"number":'30',"valores":''},voz=False)
-		
+
 
 	def query(self,texto):
 		
@@ -170,9 +179,13 @@ class arduinoCentral:
 		time.sleep(0.1)
 
 	def restart(self):
+		import RPi.GPIO as GPIO
 		print("reiniciando...")
 		self.close()
 		time.sleep(0.1)
+		GPIO.output(17, True)
+		GPIO.output(17, False)
+		time.sleep(2)
 		self.open()
 		time.sleep(0.2)
 
@@ -285,5 +298,36 @@ class dialogflowTester:
 		root.mainloop()
 
 
+class bateria:
+	import smbus
+	
+	def __init__(self):
+		self.bus = smbus.SMBus(1)
+		self.direccion = 10
+
+	def monitoreo(self):
+		from threading import Thread
+		Thread(target=self.graficos,daemon=True).start()
+		while True:
+			data = self.bus.read_i2c_block_data(self.direccion,37,2)
+			voltaje = data[0]*100+data[1]
+			self.voltaje = "V: {}".format(voltaje/100)
+			self.porcentaje = mapA(voltaje,300,410,0,100)
+			time.sleep(1)
+
+	def graficos(self):
+		import tkinter as tk
+		from tkinter import ttk
+
+		root = tk.Tk()
+		root.title("Bateria")
+		root.resizable(False,False)
+		self.porcentaje = tk.IntVar()
+		self.voltaje = tk.StringVar()
+		ttk.Progressbar(root,variable=self.porcentaje,length=100).pack()
+		tk.Label(root,textvar=self.voltaje).pack()
+		root.mainloop()
+
 
 #dialogflowTester('9d6dd218d16b457499b933d09b834d5d').graficos()
+#aaaa

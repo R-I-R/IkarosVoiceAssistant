@@ -1,24 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
+#paths
+sys.path.insert(1,"./snowboy/")
+sys.path.insert(1,"tts/")
+
+#imports
 import RPi.GPIO as GPIO
 import speech_recognition as sr
-import sys
 import signal
 import time
 import threading
 from acciones import *
 from tkinter import *
-
-sys.path.insert(1,"./snowboy/")
 import snowboydecoderIkaros as snowboydecoder
-sys.path.insert(1,"./tts/")
 import tts
 
 interrupted = False
 dia = True
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.OUT)
+GPIO.setup(27, GPIO.OUT)
 GPIO.output(17, True)
 
 def signal_handler(signal, frame):
@@ -50,7 +53,7 @@ def reconocervoz(repetir=True):
 	except sr.UnknownValueError:
 	    tts.tts("Lo siento, no entendí.",IkarosApiAI.volumen)
 	    if repetir: reconocervoz(False)
-	except sr.RequestError as e:
+	except sr.RequestError:
 	    tts.tts("no hay respuesta de Google",IkarosApiAI.volumen)
 
 def ventilador(estado):
