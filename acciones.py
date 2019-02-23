@@ -300,32 +300,33 @@ class dialogflowTester:
 
 class bateria:
 	import smbus
+	import tkinter as tk
 	
 	def __init__(self):
 		self.bus = self.smbus.SMBus(1)
 		self.direccion = 10
+		self.porcentaje = self.tk.IntVar()
+		self.voltaje = self.tk.StringVar()
 
 	def monitoreo(self):
 		from threading import Thread
 		Thread(target=self.graficos,daemon=True).start()
 		while True:
 			data = self.bus.read_i2c_block_data(self.direccion,37,2)
-			vol = data[0]*100+data[1]
-			self.voltaje.set("V: {}".format(vol/100))
-			self.porcentaje.set(mapA(vol,300,410,0,100))
+			voltaje = data[0]*100+data[1]
+			self.voltaje.set("V: {}".format(voltaje/100))
+			self.porcentaje.set(mapA(voltaje,300,410,0,100))
 			time.sleep(1)
 
 	def graficos(self):
-		import tkinter as tk
 		from tkinter import ttk
 
-		root = tk.Tk()
+		root = self.tk.Tk()
 		root.title("Bateria")
 		root.resizable(False,False)
-		self.porcentaje = tk.IntVar()
-		self.voltaje = tk.StringVar()
+		
 		ttk.Progressbar(root,variable=self.porcentaje,length=200).pack()
-		tk.Label(root,textvar=self.voltaje).pack()
+		self.tk.Label(root,textvar=self.voltaje).pack()
 		root.mainloop()
 
 
