@@ -311,8 +311,8 @@ class bateria:
 		while True:
 			data = self.bus.read_i2c_block_data(self.direccion,37,2)
 			voltaje = data[0]*100+data[1]
-			self.voltaje = "V: {}".format(voltaje/100)
-			self.porcentaje = mapA(voltaje,300,410,0,100)
+			self.voltaje.set("V: {}".format(voltaje/100))
+			self.porcentaje.set(mapA(voltaje,300,410,0,100))
 			time.sleep(1)
 
 	def graficos(self):
@@ -324,7 +324,7 @@ class bateria:
 		root.resizable(False,False)
 		self.porcentaje = tk.IntVar()
 		self.voltaje = tk.StringVar()
-		ttk.Progressbar(root,variable=self.porcentaje,length=100).pack()
+		ttk.Progressbar(root,variable=self.porcentaje,length=200).pack()
 		tk.Label(root,textvar=self.voltaje).pack()
 		root.mainloop()
 
