@@ -305,7 +305,6 @@ class bateria:
 	def __init__(self):
 		self.bus = self.smbus.SMBus(1)
 		self.direccion = 10
-		self.root = tk.Toplevel()
 		self.voltaje = tk.StringVar()
 		self.porcentaje = tk.IntVar()
 
@@ -320,17 +319,6 @@ class bateria:
 			self.porcentaje.set(mapA(voltaje,300,410,0,100))
 			time.sleep(1)
 
-	def graficos(self,root):
-		from tkinter import ttk
-
-		
-		#root.title("Bateria")
-		#root.resizable(False,False)
-
-		self.barra = ttk.Progressbar(root,variable=self.porcentaje,length=200)
-		self.barra.pack()
-		tk.Label(root,textvar=self.voltaje).pack()
-		#root.mainloop()
 
 
 #dialogflowTester('9d6dd218d16b457499b933d09b834d5d').graficos()
