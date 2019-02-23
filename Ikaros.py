@@ -102,6 +102,7 @@ def revivirReconocimientoVoz():
 	BrevivirReconocimientoVoz.config(state="disabled")
 
 
+#declaracion de hilos
 pararReconocimientoVoz = threading.Event()
 
 hiloTemporal = None
@@ -109,14 +110,16 @@ hiloReconocimientoVoz = threading.Thread(target=iniciarReconocimientoVoz,args=(p
 hiloMonitoreoArduino = threading.Thread(target=Arduino.monitoreo,daemon=True)
 hiloMonitoreoBateria = threading.Thread(target=Bateria.monitoreo,daemon=True)
 
-hiloReconocimientoVoz.start()
-hiloMonitoreoArduino.start()
-hiloMonitoreoBateria.start()
-
+#marcos tkinter
 root = tk.Tk()
 controlF = tk.Frame(root)
 bateriaF = tk.Frame(root)
 
+#variables tkinter
+Bateria.voltaje = tk.StringVar()
+Bateria.porcentaje = tk.IntVar()
+
+#objetos tkinter
 tk.Button(controlF,text="Parar reconocimiento de voz",command=pararReconocimientoVoz.set).pack()
 BrevivirReconocimientoVoz = tk.Button(controlF,text="Iniciar reconocimiento de voz",command=revivirReconocimientoVoz,state="disabled")
 BrevivirReconocimientoVoz.pack()
@@ -129,6 +132,13 @@ ttk.Progressbar(bateriaF,variable=Bateria.porcentaje,length=200).pack()
 tk.Label(bateriaF,textvar=Bateria.voltaje).pack()
 bateriaF.pack(side="left")
 
+
+#inicio de hilos
+hiloReconocimientoVoz.start()
+hiloMonitoreoArduino.start()
+hiloMonitoreoBateria.start()
+
+#inicio de loop
 root.mainloop()
 
 #GPIO.cleanup()

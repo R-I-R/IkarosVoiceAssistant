@@ -305,8 +305,8 @@ class bateria:
 	def __init__(self):
 		self.bus = self.smbus.SMBus(1)
 		self.direccion = 10
-		self.voltaje = tk.StringVar()
-		self.porcentaje = tk.IntVar()
+		self.voltaje = None
+		self.porcentaje = None
 
 	def monitoreo(self):
 		#from threading import Thread
