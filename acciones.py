@@ -302,7 +302,7 @@ class bateria:
 	import smbus
 	
 	def __init__(self):
-		self.bus = smbus.SMBus(1)
+		self.bus = self.smbus.SMBus(1)
 		self.direccion = 10
 
 	def monitoreo(self):
