@@ -305,7 +305,7 @@ class bateria:
 	def __init__(self):
 		self.bus = self.smbus.SMBus(1)
 		self.direccion = 10
-		self.root = tk.Tk()
+		self.root = tk.Toplevel()
 		self.voltaje = tk.StringVar()
 		self.porcentaje = tk.IntVar()
 
