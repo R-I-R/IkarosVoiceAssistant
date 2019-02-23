@@ -43,7 +43,6 @@ struct SCortinasPieza{
 bool enviadoLuzPieza;
 byte packetSize;
 bool avisocortinas = false;
-int voltaje = 0;
 
 //creacion de funciones
 
@@ -66,7 +65,8 @@ void setup() {
 void loop() {
   monitorearCarga();
   revisionRadio();
-  revisionSerial(); 
+  revisionSerial();
+  delay(100);
 }
 
 void revisionRadio(){
@@ -133,9 +133,9 @@ void revisionSerial(){
   }
 }
 
-void monitorearCarga(){
+int monitorearCarga(){
   int lectura = 0;
-  voltaje = 0;
+  int voltaje = 0;
  
   for(int a = 0; a < 10; a++){
     lectura = map(analogRead(bateria),0,1023,0,500);
@@ -146,9 +146,12 @@ void monitorearCarga(){
 
   if(voltaje < 410) digitalWrite(rele,HIGH);
   else digitalWrite(rele,LOW);
+
+  return voltaje;
 }
 
 void mandarCarga(){
+  int voltaje = monitorearCarga();
   byte data[] = {voltaje/100,voltaje%100};
   Wire.write(data,2);
 }
