@@ -310,8 +310,8 @@ class bateria:
 		self.porcentaje = tk.IntVar()
 
 	def monitoreo(self):
-		from threading import Thread
-		Thread(target=self.graficos,daemon=True).start()
+		#from threading import Thread
+		#Thread(target=self.graficos,daemon=True).start()
 		while True:
 			data = self.bus.read_i2c_block_data(self.direccion,37,2)
 			voltaje = data[0]*100+data[1]
@@ -320,17 +320,17 @@ class bateria:
 			self.porcentaje.set(mapA(voltaje,300,410,0,100))
 			time.sleep(1)
 
-	def graficos(self):
+	def graficos(self,root):
 		from tkinter import ttk
 
 		
-		self.root.title("Bateria")
-		self.root.resizable(False,False)
+		#root.title("Bateria")
+		#root.resizable(False,False)
 
-		self.barra = ttk.Progressbar(self.root,variable=self.porcentaje,length=200)
+		self.barra = ttk.Progressbar(root,variable=self.porcentaje,length=200)
 		self.barra.pack()
-		tk.Label(self.root,textvar=self.voltaje).pack()
-		self.root.mainloop()
+		tk.Label(root,textvar=self.voltaje).pack()
+		#root.mainloop()
 
 
 #dialogflowTester('9d6dd218d16b457499b933d09b834d5d').graficos()

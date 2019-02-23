@@ -13,7 +13,8 @@ import signal
 import time
 import threading
 from acciones import *
-from tkinter import *
+from tkinter import ttk
+import tkinter as tk
 import snowboydecoderIkaros as snowboydecoder
 import tts
 
@@ -112,13 +113,22 @@ hiloReconocimientoVoz.start()
 hiloMonitoreoArduino.start()
 hiloMonitoreoBateria.start()
 
-root = Tk()
-Button(root,text="Parar reconocimiento de voz",command=pararReconocimientoVoz.set).pack()
-BrevivirReconocimientoVoz = Button(root,text="Iniciar reconocimiento de voz",command=revivirReconocimientoVoz,state="disabled")
+root = tk.Tk()
+controlF = tk.Frame(root)
+bateriaF = tk.Frame(root)
+
+tk.Button(controlF,text="Parar reconocimiento de voz",command=pararReconocimientoVoz.set).pack()
+BrevivirReconocimientoVoz = tk.Button(controlF,text="Iniciar reconocimiento de voz",command=revivirReconocimientoVoz,state="disabled")
 BrevivirReconocimientoVoz.pack()
-Button(root,text="Reiniciar comunicacion Serial",command=Arduino.restart).pack()
-Button(root,text="Parar comunicacion Serial",command=Arduino.close).pack()
-Button(root,text="Iniciar comunicacion Serial",command=Arduino.open).pack()
+tk.Button(controlF,text="Reiniciar comunicacion Serial",command=Arduino.restart).pack()
+tk.Button(controlF,text="Parar comunicacion Serial",command=Arduino.close).pack()
+tk.Button(controlF,text="Iniciar comunicacion Serial",command=Arduino.open).pack()
+controlF.pack(side="left")
+
+ttk.Progressbar(bateriaF,variable=Bateria.porcentaje,length=200).pack()
+tk.Label(bateriaF,texvar=Bateria.voltaje).pack()
+bateriaF.pack(side="left")
+
 root.mainloop()
 
 #GPIO.cleanup()
