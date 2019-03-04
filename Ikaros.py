@@ -80,7 +80,7 @@ def buenasNoches():
 	hiloTemporal = threading.Timer(7200, ventilador,args=(True,))
 	hiloTemporal.start()
 
-Arduino = arduinoCentral("/dev/ttyACM0",9600)
+Arduino = arduinoCentral("/dev/ttyS0",9600)
 Bateria = bateria()
 IkarosApiAI = dialogflow('9d6dd218d16b457499b933d09b834d5d',Arduino)
 
