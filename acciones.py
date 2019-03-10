@@ -104,7 +104,12 @@ class arduinoCentral:
 	respuestas = 0
 
 	def __init__(self,puerto,vel):
-		self.arduino = serial.Serial(puerto, vel,timeout=0.01)
+		self.arduino = serial.Serial(puerto, vel,timeout=0.5)
+		self.arduino.setDTR(False)  
+		time.sleep(0.3)  
+		self.arduino.flushInput()  
+		self.arduino.setDTR()  
+		time.sleep(0.3)
 		self.SerialStop = False
 
 	def monitoreo(self):
@@ -316,12 +321,16 @@ class bateria:
 		while True:
 			if self.pausa: continue
 
-			data = self.bus.read_i2c_block_data(self.direccion,37,2)
-			#print(data)
-			voltaje = data[0]*100+data[1]
-			self.voltaje.set("V: {}".format(voltaje/100))
-			#self.barra.step(mapA(voltaje,300,410,0,100))
-			self.porcentaje.set(mapA(voltaje,300,410,0,100))
+			try:
+				data = self.bus.read_i2c_block_data(self.direccion,37,2)
+			except IOError:
+				print("Error en la lectura del bus I2C")
+			else:
+				voltaje = data[0]*100+data[1]
+				self.voltaje.set("V: {}".format(voltaje/100))
+				#self.barra.step(mapA(voltaje,300,410,0,100))
+				self.porcentaje.set(mapA(voltaje,300,410,0,100))
+
 			time.sleep(1)
 
 	def restart(self):
