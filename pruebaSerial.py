@@ -12,5 +12,5 @@ time.sleep(0.3)
 
 while True:
     msg = input()
-    arduinoPort.write(msg)
-    print(arduinoPort.readline())
+    arduinoPort.write(msg.encode())
+    print(arduinoPort.readline().decode())
