@@ -12,5 +12,7 @@ time.sleep(0.3)
 
 while True:
     msg = input()
+    if(msg == "salir"): break
     arduinoPort.write(msg.encode())
     print(arduinoPort.readline().decode())
+arduinoPort.close()
