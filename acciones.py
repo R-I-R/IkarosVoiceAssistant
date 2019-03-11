@@ -148,7 +148,7 @@ class arduinoCentral:
 					envios = 0
 					#tts.tts("reiniciando",self.volumen)
 					#self.restart()
-					reinicio = True
+					#reinicio = True
 					
 
 			else:
