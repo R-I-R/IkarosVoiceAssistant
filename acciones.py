@@ -119,7 +119,7 @@ class arduinoCentral:
 		while True:
 			if self.SerialStop: continue
 			if self.envio:
-				time.sleep(0.1)
+				time.sleep(1)
 				#if self.tiempo+2 > time.time():
 				msg = self.arduino.readline().decode()[:-2]
 				if msg != '':
