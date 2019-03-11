@@ -104,7 +104,7 @@ class arduinoCentral:
 	respuestas = 0
 
 	def __init__(self,puerto,vel):
-		self.arduino = serial.Serial(puerto, vel,timeout=0.5)
+		self.arduino = serial.Serial(puerto, vel,timeout=1)
 		self.arduino.setDTR(False)  
 		time.sleep(0.3)  
 		self.arduino.flushInput()  
@@ -119,7 +119,7 @@ class arduinoCentral:
 		while True:
 			if self.SerialStop: continue
 			if self.envio:
-				time.sleep(0.15)
+				time.sleep(0.1)
 				#if self.tiempo+2 > time.time():
 				msg = self.arduino.readline().decode()[:-2]
 				if msg != '':
@@ -128,26 +128,26 @@ class arduinoCentral:
 						self.enviarmsg(self.ultimaOrden)
 						reinicio = False
 						continue
-					contRespuestas += 1
-					if contRespuestas == 1:
-						self.setTimeout(60)
-						envios = 0
-					if contRespuestas >= self.respuestas:
-						self.setTimeout(0.01)
-						self.envio = 0
-						contRespuestas = 0
-						self.respuestas = 0
-						continue
+					#contRespuestas += 1
+					#if contRespuestas == 1:
+					#	self.setTimeout(60)
+					#	envios = 0
+					#if contRespuestas >= self.respuestas:
+					self.setTimeout(1)
+					self.envio = 0
+					contRespuestas = 0
+					self.respuestas = 0
+					continue
 				else:
 					envios += 1
 					self.enviarmsg(self.ultimaOrden)
 
 				if envios >= 3:
 					tts.tts("No se ha podido comunicar con el módulo",self.volumen)
-					self.setTimeout(0.01)
+					self.setTimeout(1)
 					envios = 0
-					tts.tts("reiniciando",self.volumen)
-					self.restart()
+					#tts.tts("reiniciando",self.volumen)
+					#self.restart()
 					reinicio = True
 					
 
@@ -182,7 +182,7 @@ class arduinoCentral:
 	def setTimeout(self,tiempo):
 		self.arduino._timeout = tiempo
 		self.arduino._reconfigure_port()
-		time.sleep(0.1)
+		time.sleep(0.2)
 
 	def restart(self):
 		#import RPi.GPIO as GPIO
