@@ -16,5 +16,6 @@ while True:
     arduinoPort.write(msg.encode())
     m = arduinoPort.readline().decode()
     while m != '':
+        m = arduinoPort.readline().decode()
         print(m)
 arduinoPort.close()
