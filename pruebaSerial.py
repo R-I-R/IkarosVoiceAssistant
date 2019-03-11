@@ -14,5 +14,7 @@ while True:
     msg = input()
     if(msg == "salir"): break
     arduinoPort.write(msg.encode())
-    print(arduinoPort.readline().decode())
+    m = arduinoPort.readline().decode()
+    while m != '':
+        print(m)
 arduinoPort.close()
