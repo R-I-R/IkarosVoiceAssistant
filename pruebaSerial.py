@@ -17,6 +17,7 @@ while True:
     m = arduinoPort.readline().decode()
     while m != '':
         print(m)
+        time.sleep(.5)
         m = arduinoPort.readline().decode()
         
 arduinoPort.close()
