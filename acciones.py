@@ -146,6 +146,7 @@ class arduinoCentral:
 					tts.tts("No se ha podido comunicar con el módulo",self.volumen)
 					self.setTimeout(1)
 					envios = 0
+					self.envio = 0
 					#tts.tts("reiniciando",self.volumen)
 					#self.restart()
 					#reinicio = True

@@ -13,7 +13,7 @@
 #define enviar(ID,dato) if(radio.send(ID,&dato, sizeof(dato))) Serial1.println("Error de Transmision")
 #define cerrarcortina 5000   //4700
 #define abrircortina 5200   //5200
-#define pararcortina 85
+#define pararcortina 80
 #define velabrircortina 180
 #define velcerrarcortina 10
 
