@@ -181,12 +181,10 @@ class HotwordDetector(object):
                 message += time.strftime("%Y-%m-%d %H:%M:%S",
                                          time.localtime(time.time()))
                 logger.info(message)
-                ubicacion, nombre = self.guardarAudio("correctos/")
+                self.guardarAudio()
                 callback = detected_callback[ans-1]
                 if callback is not None:
-                    callback(ubicacion,nombre)
-            else:
-                self.guardarAudio("ruido/")
+                    callback()
 
         logger.debug("finished.")
 
@@ -199,9 +197,9 @@ class HotwordDetector(object):
         self.stream_in.close()
         self.audio.terminate()
 
-    def guardarAudio(self,ubicacion=""):
-        nombre = time.strftime("%Y-%m-%d_%H-%M-%S",time.localtime(time.time()))
-        archivo = os.getcwd()+"/detecciones/{}{}.wav".format(ubicacion,nombre)
+    def guardarAudio(self):
+
+        archivo = os.getcwd()+"/detecciones/{}.wav".format(time.strftime("%Y-%m-%d_%H-%M-%S",time.localtime(time.time())))
         waveFile = wave.open(archivo,"wb")
         waveFile.setnchannels(self.detector.NumChannels())
         waveFile.setsampwidth(int(self.detector.BitsPerSample() / 8))
@@ -210,4 +208,3 @@ class HotwordDetector(object):
         waveFile.close()
         self.frames = []
         logger.info("audio guardado")
-        return os.getcwd()+"/detecciones/", nombre
