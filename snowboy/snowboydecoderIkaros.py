@@ -198,6 +198,6 @@ class HotwordDetector(object):
         waveFile.setnchannels(self.detector.NumChannels())
         waveFile.setsampwidth(self.detector.BitsPerSample() / 8)
         waveFile.setframerate(self.detector.SampleRate())
-        waveFile.writeframes(b''.join(data))
+        waveFile.writeframes(data)
         waveFile.close()
         logger.info("audio guardado")
