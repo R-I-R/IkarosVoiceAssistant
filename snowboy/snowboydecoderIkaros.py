@@ -80,6 +80,7 @@ class HotwordDetector(object):
 
         def audio_callback(in_data, frame_count, time_info, status):
             self.ring_buffer.extend(in_data)
+            self.guardarAudio(in_data)
             play_data = chr(0) * len(in_data)
             return play_data, pyaudio.paContinue
 
@@ -176,7 +177,7 @@ class HotwordDetector(object):
                 message += time.strftime("%Y-%m-%d %H:%M:%S",
                                          time.localtime(time.time()))
                 logger.info(message)
-                self.guardarAudio(data)
+                #self.guardarAudio(data)
                 callback = detected_callback[ans-1]
                 if callback is not None:
                     callback()
