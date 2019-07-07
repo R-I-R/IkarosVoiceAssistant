@@ -34,7 +34,7 @@ def interrupt_callback():
     global interrupted
     return interrupted
 
-def reconocervoz(repetir=True):
+def reconocervoz(ubicacion, nombre,repetir=True):
 	tts.tts("Lo escucho",IkarosApiAI.volumen)
 	#time.sleep(1)
 
@@ -50,10 +50,11 @@ def reconocervoz(repetir=True):
 		if texto == "Buenos días":buenosDias()
 		elif texto == "buenas noches":buenasNoches()
 		elif texto == "silencio absoluto": IkarosApiAI.silencioAbsoluto(ventilador)
+		elif texto == "descartar": os.system("mv {} {}".format(ubicacion+"correctos/"+nombre+'.wav',ubicacion+"incorrectos/"+nombre+'.wav'))
 		else: IkarosApiAI.query(texto)
 	except sr.UnknownValueError:
 	    tts.tts("Lo siento, no entendí.",IkarosApiAI.volumen)
-	    if repetir: reconocervoz(False)
+	    if repetir: reconocervoz(ubicacion,nombre,False)
 	except sr.RequestError:
 	    tts.tts("no hay respuesta de Google",IkarosApiAI.volumen)
 
