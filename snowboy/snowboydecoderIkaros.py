@@ -176,6 +176,7 @@ class HotwordDetector(object):
                 message += time.strftime("%Y-%m-%d %H:%M:%S",
                                          time.localtime(time.time()))
                 logger.info(message)
+                self.guardarAudio(data)
                 callback = detected_callback[ans-1]
                 if callback is not None:
                     callback()
@@ -190,3 +191,12 @@ class HotwordDetector(object):
         self.stream_in.stop_stream()
         self.stream_in.close()
         self.audio.terminate()
+
+    def guardarAudio(data):
+        waveFile = wave.open(time.strftime("%Y-%m-%d_%H-%M-%S",time.localtime(time.time())),"wb")
+        waveFile.setnchannels(self.detector.NumChannels())
+        waveFile.setsampwidth(self.detector.BitsPerSample() / 8)
+        waveFile.setframerate(self.detector.SampleRate())
+        waveFile.writeframes(b''.join(data))
+        waveFile.close()
+        logger.info("audio guardado")
