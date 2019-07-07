@@ -200,7 +200,7 @@ class HotwordDetector(object):
     def guardarAudio(self):
         equipo = os.name
         if equipo == "posix": archivo = os.getcwd()+"/detecciones/{}.wav".format(time.strftime("%Y-%m-%d_%H-%M-%S",time.localtime(time.time())))
-	    else : archivo = "/detecciones/{}.wav".format(time.strftime("%Y-%m-%d_%H-%M-%S",time.localtime(time.time())))
+        else : archivo = "/detecciones/{}.wav".format(time.strftime("%Y-%m-%d_%H-%M-%S",time.localtime(time.time())))
         waveFile = wave.open(archivo,"wb")
         waveFile.setnchannels(self.detector.NumChannels())
         waveFile.setsampwidth(int(self.detector.BitsPerSample() / 8))
