@@ -196,7 +196,7 @@ class HotwordDetector(object):
     def guardarAudio(self,data):
         waveFile = wave.open(time.strftime("%Y-%m-%d_%H-%M-%S",time.localtime(time.time())),"wb")
         waveFile.setnchannels(self.detector.NumChannels())
-        waveFile.setsampwidth(self.detector.BitsPerSample() / 8)
+        waveFile.setsampwidth(int(self.detector.BitsPerSample() / 8))
         waveFile.setframerate(self.detector.SampleRate())
         waveFile.writeframes(data)
         waveFile.close()
