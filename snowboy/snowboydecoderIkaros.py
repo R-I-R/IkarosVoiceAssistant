@@ -199,12 +199,15 @@ class HotwordDetector(object):
 
     def guardarAudio(self):
 
-        archivo = os.getcwd()+"/detecciones/{}.wav".format(time.strftime("%Y-%m-%d_%H-%M-%S",time.localtime(time.time())))
-        waveFile = wave.open(archivo,"wb")
-        waveFile.setnchannels(self.detector.NumChannels())
-        waveFile.setsampwidth(int(self.detector.BitsPerSample() / 8))
-        waveFile.setframerate(self.detector.SampleRate())
-        waveFile.writeframes(b''.join(self.frames))
-        waveFile.close()
-        self.frames = []
-        logger.info("audio guardado")
+        try:
+            archivo = os.getcwd()+"/detecciones/{}.wav".format(time.strftime("%Y-%m-%d_%H-%M-%S",time.localtime(time.time())))
+            waveFile = wave.open(archivo,"wb")
+            waveFile.setnchannels(self.detector.NumChannels())
+            waveFile.setsampwidth(int(self.detector.BitsPerSample() / 8))
+            waveFile.setframerate(self.detector.SampleRate())
+            waveFile.writeframes(b''.join(self.frames))
+            waveFile.close()
+            self.frames = []
+            logger.info("audio guardado")
+        except:
+            logger.warning("Error en el guardado del archivo")
