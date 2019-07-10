@@ -83,7 +83,7 @@ class HotwordDetector(object):
         def audio_callback(in_data, frame_count, time_info, status):
             self.ring_buffer.extend(in_data)
             #self.guardarAudio(in_data)
-            self.frames.append(in_data)
+            #self.frames.append(in_data)
             #logger.info(frame_count)
             play_data = chr(0) * len(in_data)
             return play_data, pyaudio.paContinue
@@ -198,7 +198,7 @@ class HotwordDetector(object):
         self.audio.terminate()
 
     def guardarAudio(self):
-
+        return
         try:
             archivo = os.getcwd()+"/detecciones/{}.wav".format(time.strftime("%Y-%m-%d_%H-%M-%S",time.localtime(time.time())))
             waveFile = wave.open(archivo,"wb")
