@@ -10,7 +10,7 @@
 #define CortinasPieza 12
 
 //defines
-#define enviar(ID,dato) if(radio.send(ID,&dato, sizeof(dato))) Serial1.println("Error de Transmision")
+#define enviar(ID,dato) if(radio.send(ID,&dato, sizeof(dato))) Serial.println("Error de Transmision")
 #define cerrarcortina 5000   //4700
 #define abrircortina 5200   //5200
 #define pararcortina 80
@@ -19,8 +19,8 @@
 
 #define bateria A0
 #define rele 4
-#define CE_PIN 10
-#define CSN_PIN 9
+#define CE_PIN 9
+#define CSN_PIN 10
 
 //creacion de objetos
 NRFLite radio;
@@ -55,12 +55,12 @@ void setup() {
   Wire.begin(Central);
   Wire.onRequest(mandarCarga);
   
-  Serial1.begin(9600);
-  while(!Serial1) monitorearCarga();
-  Serial1.setTimeout(50);
+  Serial.begin(9600);
+  while(!Serial) monitorearCarga();
+  Serial.setTimeout(50);
   
-  if(radio.init(Central,CE_PIN,CSN_PIN))Serial1.println("Radio Online");//Radio ID, CE pin, CSN pin
-  else Serial1.println("Error al conectar con el Radio");
+  if(radio.init(Central,CE_PIN,CSN_PIN))Serial.println("Radio Online");//Radio ID, CE pin, CSN pin
+  else Serial.println("Error al conectar con el Radio");
 }
 
 void loop() {
@@ -77,31 +77,31 @@ void revisionRadio(){
     radio.readData(&SLuzPiezaDato);
     if(SLuzPiezaDato.ID == LuzPieza){
       if(SLuzPiezaDato.estado){
-        Serial1.println("luz prendida");
+        Serial.println("luz prendida");
       }else{
-        Serial1.println("luz apagada");
+        Serial.println("luz apagada");
       }
     }
   }else if(packetSize == sizeof(CortinasPiezaDato)){
     radio.readData(&CortinasPiezaDato);
     if(!avisocortinas){
-      if(CortinasPiezaDato.pos == 100) Serial1.println("Abriendo cortinas");
-      else if(CortinasPiezaDato.pos == 0) Serial1.println("Cerrando cortinas");
+      if(CortinasPiezaDato.pos == 100) Serial.println("Abriendo cortinas");
+      else if(CortinasPiezaDato.pos == 0) Serial.println("Cerrando cortinas");
       else{
         String temps = "Moviendo cortinas al ";
         temps += CortinasPiezaDato.pos;
         temps += "%";
-        Serial1.println(temps);
+        Serial.println(temps);
       }
       avisocortinas = true;
     }else{
-      if(CortinasPiezaDato.pos == 100) Serial1.println("Cortinas abiertas");
-      else if(CortinasPiezaDato.pos == 0) Serial1.println("Cortinas Cerradas");
+      if(CortinasPiezaDato.pos == 100) Serial.println("Cortinas abiertas");
+      else if(CortinasPiezaDato.pos == 0) Serial.println("Cortinas Cerradas");
       else{
         String temps = "cortinas al ";
         temps += CortinasPiezaDato.pos;
         temps += "%";
-        Serial1.println(temps);
+        Serial.println(temps);
       }
       avisocortinas = false;
     }
@@ -109,10 +109,10 @@ void revisionRadio(){
 }
 
 void revisionSerial(){
-  if(Serial1.available()){
-    String serial = Serial1.readStringUntil('\n');
-    //Serial1.print("----");
-    //Serial1.println(serial);
+  if(Serial.available()){
+    String serial = Serial.readStringUntil('\n');
+    //Serial.print("----");
+    //Serial.println(serial);
     if(serial.equals("luz pieza on")){
       SLuzPiezaDato.estado = 1;
       enviar(LuzPieza,SLuzPiezaDato);
