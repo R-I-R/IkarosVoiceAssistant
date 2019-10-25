@@ -137,7 +137,7 @@ void revisionSerial(){
 }
 
 int monitorearCarga(){
-  int lectura = 0;
+  float lectura = 0;
  
   for(int a = 0; a < 10; a++)
     lectura += analogRead(bateria);
