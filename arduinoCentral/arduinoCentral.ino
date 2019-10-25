@@ -22,6 +22,8 @@
 #define CE_PIN 9
 #define CSN_PIN 10
 
+#define VCC 396
+
 //creacion de objetos
 NRFLite radio;
 
@@ -136,19 +138,13 @@ void revisionSerial(){
 
 int monitorearCarga(){
   int lectura = 0;
-  int voltajeT = 0;
  
-  for(int a = 0; a < 10; a++){
-    lectura = map(analogRead(bateria),0,1023,0,500);
-    lectura -= round(8.5*lectura/100.0);
-    voltajeT += lectura;
-  }
-  voltajeT /= 10;
-  voltaje = voltajeT;
+  for(int a = 0; a < 10; a++)
+    lectura += analogRead(bateria);
 
-  if(voltaje < 410) digitalWrite(rele,HIGH);
-  else digitalWrite(rele,LOW);
-
+  lectura /= 10;
+  lectura = (lectura * VCC) / 1024;
+  voltaje = lectura;
 }
 
 void mandarCarga(){

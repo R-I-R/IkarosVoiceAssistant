@@ -148,8 +148,8 @@ class arduinoCentral:
 					envios = 0
 					self.envio = 0
 					#tts.tts("reiniciando",self.volumen)
-					#self.restart()
-					#reinicio = True
+					self.restart()
+					reinicio = True
 					
 
 			else:
@@ -186,14 +186,9 @@ class arduinoCentral:
 		time.sleep(0.2)
 
 	def restart(self):
-		#import RPi.GPIO as GPIO
 		print("reiniciando...")
 		self.close()
 		time.sleep(0.1)
-		#GPIO.output(27, True)
-		#time.sleep(.01)
-		#GPIO.output(27, False)
-		#time.sleep(10)
 		self.open()
 		time.sleep(0.2)
 
